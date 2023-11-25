@@ -1,8 +1,21 @@
 <script setup>
+import { onMounted } from "vue";
 import "bootstrap-icons/font/bootstrap-icons.css";
 import { useUserStore } from "../stores/user";
+import { initFlowbite } from "flowbite";
+import { RouterLink } from "vue-router";
+import { useRouter } from "vue-router";
+
+const router = useRouter();
 const store = useUserStore();
-const user = store.$state.userId;
+let user = store.$state.userId;
+function signOut() {
+  user = null;
+  router.push("/");
+}
+onMounted(() => {
+  initFlowbite();
+});
 </script>
 <template>
   <nav
@@ -22,11 +35,7 @@ const user = store.$state.userId;
             <i class="bi bi-justify" style="font-size: large"></i>
           </button>
           <a href="#" class="flex ms-2 md:me-24">
-            <img
-              src="../assets/logo.png"
-              class="h-8 me-3"
-              alt="FlowBite Logo"
-            />
+            <img src="../assets/logo.png" class="h-8 me-3" alt="Cripto Logo" />
             <span
               class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
               >CRIPTO</span
@@ -48,7 +57,6 @@ const user = store.$state.userId;
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="user photo"
                 />
-                {{ user }}
                 <svg
                   class="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -72,36 +80,14 @@ const user = store.$state.userId;
               class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
             >
               <div class="px-4 py-3">
-                <div class="truncate">name@flowbite.com</div>
+                <div class="truncate">
+                  {{ user }}
+                </div>
               </div>
               <ul class="py-1" role="none">
                 <li>
                   <a
-                    href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                    >Dashboard</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                    >Settings</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
-                    role="menuitem"
-                    >Earnings</a
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
+                    @click="signOut"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
                     >Sign out</a

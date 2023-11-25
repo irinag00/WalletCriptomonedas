@@ -4,6 +4,7 @@ import useVuelidate from "@vuelidate/core";
 import { required, helpers, email } from "@vuelidate/validators";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
+
 const store = useUserStore();
 const router = useRouter();
 const userData = reactive({
