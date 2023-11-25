@@ -1,3 +1,9 @@
+<script setup>
+import "bootstrap-icons/font/bootstrap-icons.css";
+import { useUserStore } from "../stores/user";
+const store = useUserStore();
+const user = store.$state.userId;
+</script>
 <template>
   <nav
     class="fixed top-0 z-50 w-full bg-white border-b border-gray-200 dark:bg-gray-800 dark:border-gray-700"
@@ -42,7 +48,7 @@
                   src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
                   alt="user photo"
                 />
-                Usuario
+                {{ user }}
                 <svg
                   class="w-2.5 h-2.5 ms-3"
                   aria-hidden="true"
@@ -174,6 +180,3 @@
 
   <div class="p-4 sm:ml-64"></div>
 </template>
-<script setup>
-import "bootstrap-icons/font/bootstrap-icons.css";
-</script>

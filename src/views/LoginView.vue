@@ -1,3 +1,38 @@
+<script setup>
+import { reactive, computed } from "vue";
+import useVuelidate from "@vuelidate/core";
+import { required, helpers, email } from "@vuelidate/validators";
+import { useUserStore } from "../stores/user";
+import { useRouter } from "vue-router";
+const store = useUserStore();
+const router = useRouter();
+const userData = reactive({
+  email: "",
+  password: "",
+});
+const rules = computed(() => {
+  return {
+    email: {
+      required: helpers.withMessage("Ingrese un email válido", required),
+      email: helpers.withMessage("Ingrese un email válido", email),
+    },
+    password: {
+      required: helpers.withMessage("Ingrese una contraseña válida", required),
+    },
+  };
+});
+const v$ = useVuelidate(rules, userData);
+const submitForm = async () => {
+  const result = await v$.value.$validate();
+  if (result) {
+    store.$state.userId = userData.email;
+    localStorage.setItem("id", store.$state.userId);
+    router.push({ path: "/home" });
+  } else {
+    alert("no se pudo enviar");
+  }
+};
+</script>
 <template>
   <div
     class="min-h-screen grid w-full gap-4 md:grid-cols-2 justify-stretch justify-items-center"
@@ -40,7 +75,7 @@
         </div>
         <!-- body -->
         <div class="p-4 md:p-5">
-          <form class="space-y-4" action="#">
+          <form class="space-y-4" @submit.prevent="submitForm">
             <div>
               <label
                 for="email"
@@ -48,13 +83,19 @@
                 >Email</label
               >
               <input
+                v-model="userData.email"
                 type="email"
                 name="email"
                 id="email"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
                 placeholder="name@company.com"
-                required
               />
+              <span
+                v-for="error in v$.email.$errors"
+                :key="error.$uid"
+                class="font-medium text-red-600"
+                >{{ error.$message }}</span
+              >
             </div>
             <div>
               <label
@@ -63,13 +104,19 @@
                 >Contraseña</label
               >
               <input
+                v-model="userData.password"
                 type="password"
                 name="password"
                 id="password"
                 placeholder="••••••••"
                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white"
-                required
               />
+              <span
+                v-for="error in v$.password.$errors"
+                :key="error.$uid"
+                class="font-medium text-red-600"
+                >{{ error.$message }}</span
+              >
             </div>
             <div class="flex justify-between">
               <div class="flex items-start">
@@ -79,7 +126,6 @@
                     type="checkbox"
                     value=""
                     class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-blue-300 dark:bg-gray-600 dark:border-gray-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 dark:focus:ring-offset-gray-800"
-                    required
                   />
                 </div>
                 <label

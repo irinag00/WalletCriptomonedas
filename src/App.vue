@@ -1,15 +1,15 @@
 <script setup>
-import HomeView from "./views/HomeView.vue";
-import LoginView from "./views/LoginView.vue";
+// import HomeView from "./views/HomeView.vue";
+// import LoginView from "./views/LoginView.vue";
 
-// import { RouterLink, RouterView } from "vue-router";
+import { RouterLink, RouterView } from "vue-router";
 // import HelloWorld from "./components/HelloWorld.vue";
 </script>
 
 <template>
   <header>
     <!-- <LoginView></LoginView> -->
-    <HomeView></HomeView>
+    <!-- <HomeView></HomeView> -->
     <!-- <img alt="Vue logo" class="logo" src="@/assets/logo.svg" width="125" height="125" />
 
     <div class="wrapper">
@@ -22,7 +22,7 @@ import LoginView from "./views/LoginView.vue";
     </div> -->
   </header>
 
-  <!-- <RouterView /> -->
+  <RouterView />
 </template>
 
 <style scoped></style>
