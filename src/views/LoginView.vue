@@ -5,7 +5,7 @@ import { required, helpers, email } from "@vuelidate/validators";
 import { useUserStore } from "../stores/user";
 import { useRouter } from "vue-router";
 
-const store = useUserStore();
+const userStore = useUserStore();
 const router = useRouter();
 const userData = reactive({
   email: "",
@@ -26,11 +26,8 @@ const v$ = useVuelidate(rules, userData);
 const submitForm = async () => {
   const result = await v$.value.$validate();
   if (result) {
-    store.$state.userId = userData.email;
-    localStorage.setItem("id", store.$state.userId);
+    userStore.setUserId(userData.email);
     router.push({ path: "/home" });
-  } else {
-    alert("no se pudo enviar");
   }
 };
 </script>

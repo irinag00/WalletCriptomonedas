@@ -7,10 +7,9 @@ import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
-const store = useUserStore();
-let user = store.$state.userId;
+const userStore = useUserStore();
+const user = userStore.getUserId();
 function signOut() {
-  user = null;
   router.push("/");
 }
 onMounted(() => {
@@ -80,8 +79,13 @@ onMounted(() => {
               class="z-50 hidden my-4 text-base list-none bg-white divide-y divide-gray-100 rounded shadow dark:bg-gray-700 dark:divide-gray-600"
             >
               <div class="px-4 py-3">
-                <div class="truncate">
-                  {{ user }}
+                <div class="truncate flex items-center px-2 py-1">
+                  <img
+                    class="w-8 h-8 me-2 rounded-full"
+                    src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
+                    alt="user photo"
+                  />
+                  <h3 class="font-semibold text-gray-700">{{ user }}</h3>
                 </div>
               </div>
               <ul class="py-1" role="none">
@@ -90,7 +94,7 @@ onMounted(() => {
                     @click="signOut"
                     class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
                     role="menuitem"
-                    >Sign out</a
+                    >Cerrar Sesión</a
                   >
                 </li>
               </ul>
@@ -108,18 +112,20 @@ onMounted(() => {
   >
     <div class="h-full px-3 pb-4 overflow-y-auto bg-white dark:bg-gray-800">
       <ul class="space-y-2 font-medium">
-        <li>
-          <a
-            href="#"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-          >
-            <i
-              class="bi bi-pie-chart"
-              style="font-size: 23px; color: #04b3c3"
-            ></i>
-            <span class="ms-3">Dashboard</span>
-          </a>
-        </li>
+        <RouterLink to="/home">
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            >
+              <i
+                class="bi bi-pie-chart"
+                style="font-size: 23px; color: #04b3c3"
+              ></i>
+              <span class="ms-3">Dashboard</span>
+            </a>
+          </li>
+        </RouterLink>
         <li>
           <a
             href="#"
