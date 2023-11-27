@@ -15,7 +15,7 @@ import QuotesTable from "../components/QuotesTable.vue";
         </div>
       </div>
     </div>
-    <div class="p-4 border-b">
+    <div class="p-4">
       <QuotesTable></QuotesTable>
     </div>
   </div>
