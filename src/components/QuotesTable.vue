@@ -1,34 +1,15 @@
 <script setup>
 import { ref, onMounted } from "vue";
 import { getBTC, getDAI, getETH, getUSDC } from "../services/apiCrytoYa";
+import { useApiDataStore } from "../stores/apiCryptoData";
 
-const coinData = ref([]);
+const store = useApiDataStore();
 
 onMounted(async () => {
-  try {
-    const [btcResponse, daiResponse, ethResponse, usdcResponse] =
-      await Promise.all([
-        getBTC("btc"),
-        getDAI("dai"),
-        getETH("eth"),
-        getUSDC("usdc"),
-      ]);
-    const responses = [btcResponse, daiResponse, ethResponse, usdcResponse];
-    responses.forEach((response, index) => {
-      const coinName = ["Bitcoin", "Dai", "Ethereum", "Usd Coin"][index];
-      const coin = ["btc", "dai", "eth", "usdc"][index];
-      coinData.value.push({
-        name: coinName,
-        coin: coin.toUpperCase(),
-        img: `src/assets/img-coin/${coin}.png`,
-        priceBuy: response.data.ask,
-        priceSale: response.data.bid,
-      });
-    });
-  } catch (error) {
-    console.error("Error al obtener los datos de la api: ", error);
-  }
+  await store.fetchCryptoData();
 });
+
+const coinData = store.coinData;
 </script>
 <template>
   <h2 class="font-normal text-2xl mb-3">Cotizaciones</h2>
