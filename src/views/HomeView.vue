@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from "../components/Navbar.vue";
+import QuotesTable from "../components/QuotesTable.vue";
 </script>
 <template>
   <Navbar></Navbar>
@@ -14,6 +15,8 @@ import Navbar from "../components/Navbar.vue";
         </div>
       </div>
     </div>
-    <div class="p-4 border-b">Cotizaciones</div>
+    <div class="p-4 border-b">
+      <QuotesTable></QuotesTable>
+    </div>
   </div>
 </template>

@@ -5,12 +5,25 @@ import { useUserStore } from "../stores/user";
 import { initFlowbite } from "flowbite";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
+import Swal from "sweetalert2";
 
 const router = useRouter();
 const userStore = useUserStore();
 const user = userStore.getUserId();
 function signOut() {
-  router.push("/");
+  Swal.fire({
+    title: "Desea cerrar sesión?",
+    icon: "question",
+    showCancelButton: true,
+    confirmButtonColor: "#04354c",
+    cancelButtonColor: "#04b3c3",
+    confirmButtonText: "Cerrar Sesión",
+    cancelButtonText: "Cancelar",
+  }).then((result) => {
+    if (result.isConfirmed) {
+      router.push("/");
+    }
+  });
 }
 onMounted(() => {
   initFlowbite();
@@ -92,7 +105,7 @@ onMounted(() => {
                 <li>
                   <a
                     @click="signOut"
-                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white"
+                    class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-600 dark:hover:text-white cursor-pointer"
                     role="menuitem"
                     >Cerrar Sesión</a
                   >
