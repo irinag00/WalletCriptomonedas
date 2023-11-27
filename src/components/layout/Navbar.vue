@@ -1,7 +1,7 @@
 <script setup>
 import { onMounted } from "vue";
 import "bootstrap-icons/font/bootstrap-icons.css";
-import { useUserStore } from "../stores/user";
+import { useUserStore } from "../../stores/user";
 import { initFlowbite } from "flowbite";
 import { RouterLink } from "vue-router";
 import { useRouter } from "vue-router";
@@ -47,7 +47,11 @@ onMounted(() => {
             <i class="bi bi-justify" style="font-size: large"></i>
           </button>
           <a href="#" class="flex ms-2 md:me-24">
-            <img src="../assets/logo.png" class="h-8 me-3" alt="Cripto Logo" />
+            <img
+              src="../../assets/logo.png"
+              class="h-8 me-3"
+              alt="Cripto Logo"
+            />
             <span
               class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
               >CRIPTO</span
@@ -139,20 +143,22 @@ onMounted(() => {
             </a>
           </li>
         </RouterLink>
-        <li>
-          <a
-            href="#"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-          >
-            <i
-              class="bi bi-cash-coin"
-              style="font-size: 23px; color: #04b3c3"
-            ></i>
-            <span class="flex-1 ms-3 whitespace-nowrap text-"
-              >Transacciones</span
+        <RouterLink to="/transacciones">
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
             >
-          </a>
-        </li>
+              <i
+                class="bi bi-cash-coin"
+                style="font-size: 23px; color: #04b3c3"
+              ></i>
+              <span class="flex-1 ms-3 whitespace-nowrap text-"
+                >Transacciones</span
+              >
+            </a>
+          </li>
+        </RouterLink>
         <li>
           <a
             href="#"
