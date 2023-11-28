@@ -6,15 +6,15 @@ const apiCrypto = axios.create({
 const exchangeRipio = "ripio";
 const exchangeSatoshi = "satoshitango";
 
-export async function getBTC(cripto) {
+export function getBTC(cripto) {
   return apiCrypto.get(`${exchangeSatoshi}/${cripto}/ars`);
 }
-export async function getDAI(cripto) {
+export function getDAI(cripto) {
   return apiCrypto.get(`${exchangeSatoshi}/${cripto}/ars`);
 }
-export async function getETH(cripto) {
+export function getETH(cripto) {
   return apiCrypto.get(`${exchangeRipio}/${cripto}/ars`);
 }
-export async function getUSDC(cripto) {
+export function getUSDC(cripto) {
   return apiCrypto.get(`${exchangeRipio}/${cripto}/ars`);
 }
