@@ -182,20 +182,24 @@ onMounted(() => {
               class="py-2 text-sm text-gray-700 dark:text-gray-200"
               aria-labelledby="dropdownRightButton"
             >
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Comprar</a
-                >
-              </li>
-              <li>
-                <a
-                  href="#"
-                  class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
-                  >Vender</a
-                >
-              </li>
+              <RouterLink to="/transactionBuy">
+                <li>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >Comprar</a
+                  >
+                </li>
+              </RouterLink>
+              <RouterLink to="/transaction/sale">
+                <li>
+                  <a
+                    href="#"
+                    class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white"
+                    >Vender</a
+                  >
+                </li>
+              </RouterLink>
             </ul>
           </div>
         </li>

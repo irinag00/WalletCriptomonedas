@@ -4,10 +4,15 @@ import { getBTC, getDAI, getETH, getUSDC } from "../services/apiCrytoYa";
 export const useApiDataStore = defineStore("apiData", {
   state: () => ({
     coinData: [],
+    dataLoaded: false,
   }),
   actions: {
     async fetchCryptoData() {
       try {
+        if (this.dataLoaded) {
+          return; // No vuelvas a cargar los datos si ya están presentes
+        }
+
         const [btcResponse, daiResponse, ethResponse, usdcResponse] =
           await Promise.all([
             getBTC("btc"),
@@ -27,9 +32,13 @@ export const useApiDataStore = defineStore("apiData", {
             priceSale: response.data.bid,
           });
         });
+        this.dataLoaded = true; // Marca que los datos se han cargado
       } catch (error) {
         console.error("Error al obtener los datos de la API: ", error);
       }
+    },
+    clearCoinData() {
+      this.coinData = []; // Método para limpiar coinData
     },
   },
 });
