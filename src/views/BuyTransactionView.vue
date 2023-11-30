@@ -26,6 +26,7 @@ export default {
       selectedCoin: null,
       arsValue: null,
       cryptoValue: null,
+      validationMoney: false,
     };
   },
   mounted() {
@@ -71,18 +72,31 @@ export default {
         this.arsValue = null;
       }
     },
+    validation() {
+      if (this.arsValue <= 0 && this.cryptoValue <= 0) {
+        this.validationMoney = true;
+        if (this.selectedCoin === null) {
+          this.validationMoney = true;
+        }
+      } else {
+        this.validationMoney = false;
+      }
+    },
     purchase() {
+      this.validation();
       const userStore = useUserStore();
       const user = userStore.getUserId();
-      let transaction = {
-        user_id: user,
-        action: "purchase",
-        crypto_code: this.selectedCoin.coin,
-        crypto_amount: String(this.cryptoValue),
-        money: String(this.arsValue),
-        datetime: this.formatDate,
-      };
-      console.log(transaction);
+      if (this.validationMoney === false) {
+        let transaction = {
+          user_id: user,
+          action: "purchase",
+          crypto_code: this.selectedCoin.coin,
+          crypto_amount: String(this.cryptoValue),
+          money: String(this.arsValue),
+          datetime: this.formatDate,
+        };
+        console.log(transaction);
+      }
     },
   },
   computed: {
@@ -117,7 +131,7 @@ export default {
                 <input
                   type="number"
                   step="any"
-                  min="0"
+                  min="1"
                   class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-s-lg border-e-gray-50 border-e-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="10000"
                   required
@@ -144,7 +158,7 @@ export default {
                 <input
                   type="number"
                   step="any"
-                  min="0"
+                  min="1"
                   class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-s-lg border-e-gray-50 border-e-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="0.323"
                   required
@@ -220,6 +234,11 @@ export default {
               </div>
             </div>
           </div>
+          <span
+            v-show="validationMoney"
+            class="text-red-500 font-semibold flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
+            >Ingrese un valor válido para poder realizar la compra.</span
+          >
           <div
             v-if="selectedCoin"
             class="flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
