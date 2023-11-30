@@ -2,6 +2,7 @@
 import Navbar from "../components/layout/Navbar.vue";
 import Balance from "../components/layout/Balance.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
+import { useUserStore } from "../stores/user";
 import { ref, onMounted, onUnmounted } from "vue";
 import { initFlowbite } from "flowbite";
 
@@ -70,6 +71,33 @@ export default {
         this.arsValue = null;
       }
     },
+    purchase() {
+      const userStore = useUserStore();
+      const user = userStore.getUserId();
+      let transaction = {
+        user_id: user,
+        action: "purchase",
+        crypto_code: this.selectedCoin.coin,
+        crypto_amount: String(this.cryptoValue),
+        money: String(this.arsValue),
+        datetime: this.formatDate,
+      };
+      console.log(transaction);
+    },
+  },
+  computed: {
+    formatDate() {
+      let today = new Date();
+      let dd = String(today.getDate()).padStart(2, "0");
+      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
+      let yyyy = today.getFullYear();
+      let hh = today.getHours();
+      let ss = today.getMinutes();
+
+      today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
+
+      return today;
+    },
   },
 };
 </script>
@@ -80,7 +108,7 @@ export default {
     <h1 class="font-semibold text-2xl text-center mt-3">Comprar</h1>
     <div class="w-full my-6">
       <div class="bg-white rounded-lg border shadow-xl p-8 overflow-hidden">
-        <form class="max-w-xl mx-auto">
+        <div class="max-w-xl mx-auto">
           <div
             class="space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse flex items-center flex-col sm:flex-row mb-4"
           >
@@ -92,6 +120,7 @@ export default {
                   min="0"
                   class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-s-lg border-e-gray-50 border-e-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="10000"
+                  required
                   v-model="arsValue"
                   @input="convertToCrypto"
                 />
@@ -118,6 +147,7 @@ export default {
                   min="0"
                   class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-s-lg border-e-gray-50 border-e-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
                   placeholder="0.323"
+                  required
                   v-model="cryptoValue"
                   @input="convertToArs"
                 />
@@ -135,7 +165,7 @@ export default {
                     style="width: 20px"
                     class="mr-3"
                   />
-                  {{ selectedCoin.coin }}
+                  {{ selectedCoin.coin.toUpperCase() }}
                 </div>
                 <div v-else>Elija una moneda</div>
                 <svg
@@ -182,7 +212,7 @@ export default {
                           style="width: 20px"
                           class="mr-4"
                         />
-                        {{ crypto.coin }}
+                        {{ crypto.coin.toUpperCase() }}
                       </div>
                     </button>
                   </li>
@@ -227,13 +257,14 @@ export default {
             class="flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0"
           >
             <button
-              type="submit"
+              type="button"
               class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
+              @click.prevent="purchase"
             >
               Realizar compra
             </button>
           </div>
-        </form>
+        </div>
       </div>
     </div>
   </div>

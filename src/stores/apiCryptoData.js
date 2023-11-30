@@ -26,7 +26,7 @@ export const useApiDataStore = defineStore("apiData", {
           const coin = ["btc", "dai", "eth", "usdc"][index];
           this.coinData.push({
             name: coinName,
-            coin: coin.toUpperCase(),
+            coin: coin,
             img: `src/assets/img-coin/${coin}.png`,
             priceBuy: response.data.ask,
             priceSale: response.data.bid,
