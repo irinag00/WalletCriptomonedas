@@ -3,8 +3,9 @@ import Navbar from "../components/layout/Navbar.vue";
 import Balance from "../components/layout/Balance.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
-import { ref, onMounted, onUnmounted } from "vue";
+import { useTransactionStore } from "../stores/transaction";
 import { initFlowbite } from "flowbite";
+import Swal from "sweetalert2";
 
 // const store = useApiDataStore();
 
@@ -30,7 +31,7 @@ export default {
     };
   },
   mounted() {
-    // initFlowbite();
+    initFlowbite();
   },
   async created() {
     const store = useApiDataStore();
@@ -66,36 +67,62 @@ export default {
         );
         if (selectedCrypto) {
           const cryptoToArs = this.cryptoValue * selectedCrypto.priceBuy;
-          this.arsValue = cryptoToArs.toFixed(3);
+          this.arsValue = cryptoToArs.toFixed(2);
         }
       } else {
         this.arsValue = null;
       }
     },
+    resetInput() {
+      this.cryptoValue = "";
+      this.arsValue = "";
+    },
     validation() {
-      if (this.arsValue <= 0 && this.cryptoValue <= 0) {
+      if (
+        (this.arsValue <= 0 && this.cryptoValue <= 0) ||
+        this.selectedCoin === null
+      ) {
         this.validationMoney = true;
-        if (this.selectedCoin === null) {
-          this.validationMoney = true;
-        }
       } else {
         this.validationMoney = false;
       }
+      console.log(this.validationMoney);
     },
     purchase() {
       this.validation();
       const userStore = useUserStore();
       const user = userStore.getUserId();
+      const transactionStore = useTransactionStore();
       if (this.validationMoney === false) {
-        let transaction = {
-          user_id: user,
-          action: "purchase",
-          crypto_code: this.selectedCoin.coin,
-          crypto_amount: String(this.cryptoValue),
-          money: String(this.arsValue),
-          datetime: this.formatDate,
-        };
-        console.log(transaction);
+        Swal.fire({
+          title: "Desea finalizar la transacción?",
+          html: `Valor a comprar: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a pagar: <b>${this.arsValue}ars</b>`,
+          icon: "warning",
+          iconColor: "#04b3c3",
+          showCancelButton: true,
+          confirmButtonColor: "#04354c",
+          cancelButtonColor: "#04b3c3",
+          confirmButtonText: "Finalizar compra",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
+          if (result.isConfirmed) {
+            Swal.fire({
+              title: "Compra realizada con éxito!",
+              text: "Muchas gracias por confiar en nosotros.",
+              icon: "success",
+            });
+            let transaction = {
+              user_id: user,
+              action: "purchase",
+              crypto_code: this.selectedCoin.coin,
+              crypto_amount: String(this.cryptoValue),
+              money: String(this.arsValue),
+              datetime: this.formatDate,
+            };
+            console.log(transaction);
+            transactionStore.setTransactionUpdateBalance(transaction);
+          }
+        });
       }
     },
   },
@@ -119,15 +146,16 @@ export default {
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
     <Balance></Balance>
-    <h1 class="font-semibold text-2xl text-center mt-3">Comprar</h1>
+
     <div class="w-full my-6">
       <div class="bg-white rounded-lg border shadow-xl p-8 overflow-hidden">
+        <h1 class="font-semibold text-2xl text-center mb-10">Compra</h1>
         <div class="max-w-xl mx-auto">
           <div
-            class="space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 rtl:space-x-reverse flex items-center flex-col sm:flex-row mb-4"
+            class="flex gap-4 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 flex items-center flex-col lg:flex-row lg:space-y-0 lg:space-x-4 lg:items-center mb-4"
           >
-            <div class="flex mr-10">
-              <div class="relative w-full">
+            <div class="flex mr-10 justify-center">
+              <div class="relative w-400">
                 <input
                   type="number"
                   step="any"
@@ -153,8 +181,8 @@ export default {
                 ARS
               </button>
             </div>
-            <div class="flex ml-10 mt-4">
-              <div class="relative w-full">
+            <div class="flex ml-10 justify-center">
+              <div class="relative w-400">
                 <input
                   type="number"
                   step="any"
@@ -182,21 +210,7 @@ export default {
                   {{ selectedCoin.coin.toUpperCase() }}
                 </div>
                 <div v-else>Elija una moneda</div>
-                <svg
-                  class="w-2.5 h-2.5 ms-2.5"
-                  aria-hidden="true"
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 10 6"
-                >
-                  <path
-                    stroke="currentColor"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="m1 1 4 4 4-4"
-                  />
-                </svg>
+                <i class="bi bi-chevron-down ms-2.5"></i>
               </button>
               <div
                 id="dropdown-crypto"
@@ -253,23 +267,10 @@ export default {
             <button
               type="reset"
               class="text-sm text-blue-700 dark:text-blue-500 inline-flex items-center font-medium hover:underline"
+              @click="resetInput"
             >
               Refrescar
-              <svg
-                class="w-3 h-3 ms-1.5"
-                aria-hidden="true"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 18 20"
-              >
-                <path
-                  stroke="currentColor"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                  stroke-width="2"
-                  d="M16 1v5h-5M2 19v-5h5m10-4a8 8 0 0 1-14.947 3.97M1 10a8 8 0 0 1 14.947-3.97"
-                />
-              </svg>
+              <i class="bi bi-repeat ms-1.5"></i>
             </button>
           </div>
           <div
@@ -277,8 +278,8 @@ export default {
           >
             <button
               type="button"
+              @click.prevent="purchase()"
               class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
-              @click.prevent="purchase"
             >
               Realizar compra
             </button>
