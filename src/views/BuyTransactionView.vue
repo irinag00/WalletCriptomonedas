@@ -7,15 +7,6 @@ import { useTransactionStore } from "../stores/transaction";
 import { initFlowbite } from "flowbite";
 import Swal from "sweetalert2";
 
-// const store = useApiDataStore();
-
-// const coinData = ref([]); // Usando ref para almacenar datos reactivos
-
-// onMounted(async () => {
-//   await store.fetchCryptoData();
-//   // Actualizando el valor del ref con los datos del store
-//   coinData.value = store.coinData;
-// });
 export default {
   components: {
     Navbar,
