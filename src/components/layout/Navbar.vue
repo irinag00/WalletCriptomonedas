@@ -46,17 +46,19 @@ onMounted(() => {
             <span class="sr-only">Abrir sidebar</span>
             <i class="bi bi-justify" style="font-size: large"></i>
           </button>
-          <a href="#" class="flex ms-2 md:me-24">
-            <img
-              src="../../assets/logo.png"
-              class="h-8 me-3"
-              alt="Cripto Logo"
-            />
-            <span
-              class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
-              >CRIPTO</span
-            >
-          </a>
+          <RouterLink to="/home">
+            <a href="#" class="flex ms-2 md:me-24">
+              <img
+                src="../../assets/logo.png"
+                class="h-8 me-3"
+                alt="Cripto Logo"
+              />
+              <span
+                class="self-center text-xl font-semibold sm:text-2xl whitespace-nowrap dark:text-white"
+                >CRIPTO</span
+              >
+            </a>
+          </RouterLink>
         </div>
         <div class="flex items-center">
           <div class="flex items-center ms-3">
@@ -163,7 +165,7 @@ onMounted(() => {
                   >
                 </li>
               </RouterLink>
-              <RouterLink to="/transaction/sale">
+              <RouterLink to="/transactionSell">
                 <li>
                   <a
                     href="#"
@@ -176,18 +178,20 @@ onMounted(() => {
           </div>
         </li>
         <!-- </RouterLink> -->
-        <li>
-          <a
-            href="#"
-            class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
-          >
-            <i
-              class="bi bi-clock-history"
-              style="font-size: 23px; color: #04b3c3"
-            ></i>
-            <span class="flex-1 ms-3 whitespace-nowrap">Historial</span>
-          </a>
-        </li>
+        <RouterLink to="/history">
+          <li>
+            <a
+              href="#"
+              class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group"
+            >
+              <i
+                class="bi bi-clock-history"
+                style="font-size: 23px; color: #04b3c3"
+              ></i>
+              <span class="flex-1 ms-3 whitespace-nowrap">Historial</span>
+            </a>
+          </li>
+        </RouterLink>
         <li>
           <a
             href="#"

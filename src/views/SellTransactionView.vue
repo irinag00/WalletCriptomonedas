@@ -1,14 +1,10 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
 import Balance from "../components/layout/Balance.vue";
-import Hero from "../components/layout/Hero.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
 import { useTransactionStore } from "../stores/transaction";
-import { newTransaction } from "../services/apiClient";
-import { initFlowbite } from "flowbite";
-import Swal from "sweetalert2";
-
+import Hero from "../components/layout/Hero.vue";
 export default {
   components: {
     Navbar,
@@ -22,7 +18,7 @@ export default {
       arsValue: null,
       cryptoValue: null,
       validationMoney: false,
-      nameSection: "Compra",
+      nameSection: "Venta",
     };
   },
   mounted() {
@@ -34,8 +30,8 @@ export default {
     this.coinData = store.coinData;
   },
   methods: {
-    handleSelection(coin, img, priceBuy) {
-      this.selectedCoin = { coin: coin, img: img, priceBuy: priceBuy };
+    handleSelection(coin, img, priceSale) {
+      this.selectedCoin = { coin: coin, img: img, priceSale: priceSale };
       console.log("valor seleccionado: ", this.selectedCoin.coin);
     },
     async convertToCrypto() {
@@ -44,7 +40,7 @@ export default {
           (crypto) => crypto.coin === this.selectedCoin.coin
         );
         if (selectedCrypto) {
-          const arsToCrypto = this.arsValue / selectedCrypto.priceBuy;
+          const arsToCrypto = this.arsValue / selectedCrypto.priceSale;
           this.cryptoValue = arsToCrypto.toFixed(6);
         }
       } else {
@@ -61,7 +57,7 @@ export default {
           (crypto) => crypto.coin === this.selectedCoin.coin
         );
         if (selectedCrypto) {
-          const cryptoToArs = this.cryptoValue * selectedCrypto.priceBuy;
+          const cryptoToArs = this.cryptoValue * selectedCrypto.priceSale;
           this.arsValue = cryptoToArs.toFixed(2);
         }
       } else {
@@ -83,26 +79,23 @@ export default {
       }
       console.log(this.validationMoney);
     },
-    async purchase() {
-      try {
-        this.validation();
-        const userStore = useUserStore();
-        const user = userStore.getUserId();
-        const transactionStore = useTransactionStore();
-
-        if (this.validationMoney === false) {
-          const result = await Swal.fire({
-            title: "Desea finalizar la transacción?",
-            html: `Valor a comprar: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a pagar: <b>${this.arsValue}ars</b>`,
-            icon: "warning",
-            iconColor: "#04b3c3",
-            showCancelButton: true,
-            confirmButtonColor: "#04354c",
-            cancelButtonColor: "#04b3c3",
-            confirmButtonText: "Finalizar compra",
-            cancelButtonText: "Cancelar",
-          });
-
+    sell() {
+      this.validation();
+      const userStore = useUserStore();
+      const user = userStore.getUserId();
+      const transactionStore = useTransactionStore();
+      if (this.validationMoney === false) {
+        Swal.fire({
+          title: "Desea finalizar la transacción?",
+          html: `Valor a vender: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a obtener: <b>${this.arsValue}ars</b>`,
+          icon: "warning",
+          iconColor: "#04b3c3",
+          showCancelButton: true,
+          confirmButtonColor: "#04354c",
+          cancelButtonColor: "#04b3c3",
+          confirmButtonText: "Finalizar venta",
+          cancelButtonText: "Cancelar",
+        }).then((result) => {
           if (result.isConfirmed) {
             Swal.fire({
               title: "Compra realizada con éxito!",
@@ -111,26 +104,16 @@ export default {
             });
             let transaction = {
               user_id: user,
-              action: "purchase",
+              action: "sale",
               crypto_code: this.selectedCoin.coin,
               crypto_amount: String(this.cryptoValue),
               money: String(this.arsValue),
               datetime: this.formatDate,
             };
             console.log(transaction);
-            //Envio los datos a la API
-            const response = await newTransaction(transaction);
-            if (response) {
-              console.log("Información enviada correctamente.");
-            } else {
-              console.error("Hubo un error al enviar la información.");
-            }
-            await transactionStore.fetchTransactions(user);
+            // transactionStore.setTransactionUpdateBalance(transaction);
           }
-          this.resetInput();
-        }
-      } catch (error) {
-        console.error("No se pudieron enviar los datos.");
+        });
       }
     },
   },
@@ -156,13 +139,13 @@ export default {
     <Balance></Balance>
     <Hero :sectionName="nameSection"></Hero>
     <div class="w-full">
-      <div class="shadow-xl rounded-lg py-14 overflow-hidden m-0">
+      <div class="bg-white rounded-lg shadow-xl py-14 overflow-hidden">
         <div class="max-w-xl mx-auto">
           <div
             class="flex gap-4 space-x-0 space-y-4 sm:space-y-0 sm:space-x-4 flex items-center flex-col lg:flex-row lg:space-y-0 lg:space-x-4 lg:items-center mb-4"
           >
             <div class="flex mr-10 justify-center">
-              <div class="relative">
+              <div class="relative w-400">
                 <input
                   type="number"
                   step="any"
@@ -189,7 +172,7 @@ export default {
               </button>
             </div>
             <div class="flex ml-10 justify-center">
-              <div class="relative">
+              <div class="relative w-400">
                 <input
                   type="number"
                   step="any"
@@ -236,7 +219,7 @@ export default {
                         handleSelection(
                           crypto.coin,
                           crypto.img,
-                          crypto.priceBuy
+                          crypto.priceSale
                         )
                       "
                     >
@@ -265,7 +248,7 @@ export default {
             class="flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
           >
             <h2 class="font-semibold">
-              Cotización actual: ${{ selectedCoin.priceBuy }}
+              Cotización actual: ${{ selectedCoin.priceSale }}
             </h2>
           </div>
           <div
@@ -285,10 +268,10 @@ export default {
           >
             <button
               type="button"
-              @click.prevent="purchase()"
-              class="text-white text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
+              @click.prevent=""
+              class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
             >
-              Realizar compra
+              Realizar venta
             </button>
           </div>
         </div>

@@ -4,6 +4,7 @@ import LoginView from "../views/LoginView.vue";
 import HistoryView from "../views/HistoryView.vue";
 import InvestmentView from "../views/InvestmentView.vue";
 import BuyTransactionView from "../views/BuyTransactionView.vue";
+import SellTransactionView from "../views/SellTransactionView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -23,13 +24,13 @@ const router = createRouter({
       name: "comprar",
       component: BuyTransactionView,
     },
-    // {
-    //   path: "/transaction/sale",
-    //   name: "vender",
-    //   component: SaleTransactionView,
-    // },
     {
-      path: "/historial",
+      path: "/transactionSell",
+      name: "vender",
+      component: SellTransactionView,
+    },
+    {
+      path: "/history",
       name: "historial",
       component: HistoryView,
     },

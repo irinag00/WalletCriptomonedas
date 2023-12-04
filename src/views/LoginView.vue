@@ -38,7 +38,7 @@ const submitForm = async () => {
     <div
       class="w-full bg-contain bg-cyan-500 bg-blend-multiply flex justify-center items-center"
       style="
-        background-image: url('https://www.business2community.com/mx/wp-content/uploads/sites/18/2022/08/bitcoin-11.jpg');
+        background-image: url('src/assets/plataforma.jpg');
         background-size: cover;
       "
     >
