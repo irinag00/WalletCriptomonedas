@@ -125,7 +125,7 @@ export default {
             } else {
               console.error("Hubo un error al enviar la información.");
             }
-            await transactionStore.fetchTransactions(user);
+            // await transactionStore.fetchTransactions(user);
           }
           this.resetInput();
         }
@@ -136,16 +136,17 @@ export default {
   },
   computed: {
     formatDate() {
-      let today = new Date();
-      let dd = String(today.getDate()).padStart(2, "0");
-      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      let yyyy = today.getFullYear();
-      let hh = today.getHours();
-      let ss = today.getMinutes();
+      const dateTime = new Date();
+      const dd = String(dateTime.getDate()).padStart(2, "0");
+      const mm = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const yyyy = dateTime.getFullYear();
+      const hh = String(dateTime.getHours()).padStart(2, "0");
+      const ss = String(dateTime.getMinutes()).padStart(2, "0");
 
-      today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
+      // today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
+      const formattedDateTime = `${dd}-${mm}-${yyyy} ${hh}:${ss}`;
 
-      return today;
+      return formattedDateTime;
     },
   },
 };

@@ -79,23 +79,26 @@ export default {
       }
       console.log(this.validationMoney);
     },
-    sell() {
-      this.validation();
-      const userStore = useUserStore();
-      const user = userStore.getUserId();
-      const transactionStore = useTransactionStore();
-      if (this.validationMoney === false) {
-        Swal.fire({
-          title: "Desea finalizar la transacción?",
-          html: `Valor a vender: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a obtener: <b>${this.arsValue}ars</b>`,
-          icon: "warning",
-          iconColor: "#04b3c3",
-          showCancelButton: true,
-          confirmButtonColor: "#04354c",
-          cancelButtonColor: "#04b3c3",
-          confirmButtonText: "Finalizar venta",
-          cancelButtonText: "Cancelar",
-        }).then((result) => {
+    async sell() {
+      try {
+        this.validation();
+        const userStore = useUserStore();
+        const user = userStore.getUserId();
+        const transactionStore = useTransactionStore();
+
+        if (this.validationMoney === false) {
+          const result = await Swal.fire({
+            title: "Desea finalizar la transacción?",
+            html: `Valor a vender: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a obtener: <b>${this.arsValue}ars</b>`,
+            icon: "warning",
+            iconColor: "#04b3c3",
+            showCancelButton: true,
+            confirmButtonColor: "#04354c",
+            cancelButtonColor: "#04b3c3",
+            confirmButtonText: "Finalizar venta",
+            cancelButtonText: "Cancelar",
+          });
+
           if (result.isConfirmed) {
             Swal.fire({
               title: "Compra realizada con éxito!",
@@ -111,24 +114,35 @@ export default {
               datetime: this.formatDate,
             };
             console.log(transaction);
-            // transactionStore.setTransactionUpdateBalance(transaction);
+            //Envio los datos a la API
+            // const response = await newTransaction(transaction);
+            // if (response) {
+            //   console.log("Información enviada correctamente.");
+            // } else {
+            //   console.error("Hubo un error al enviar la información.");
+            // }
+            // await transactionStore.fetchTransactions(user);
           }
-        });
+          this.resetInput();
+        }
+      } catch (error) {
+        console.error("No se pudieron enviar los datos.");
       }
     },
   },
   computed: {
     formatDate() {
-      let today = new Date();
-      let dd = String(today.getDate()).padStart(2, "0");
-      let mm = String(today.getMonth() + 1).padStart(2, "0"); //January is 0!
-      let yyyy = today.getFullYear();
-      let hh = today.getHours();
-      let ss = today.getMinutes();
+      const dateTime = new Date();
+      const dd = String(dateTime.getDate()).padStart(2, "0");
+      const mm = String(dateTime.getMonth() + 1).padStart(2, "0");
+      const yyyy = dateTime.getFullYear();
+      const hh = String(dateTime.getHours()).padStart(2, "0");
+      const ss = String(dateTime.getMinutes()).padStart(2, "0");
 
-      today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
+      // today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
+      const formattedDateTime = `${dd}-${mm}-${yyyy} ${hh}:${ss}`;
 
-      return today;
+      return formattedDateTime;
     },
   },
 };

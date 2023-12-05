@@ -1,7 +1,6 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
 import Balance from "../components/layout/Balance.vue";
-import { useTransactionStore } from "../stores/transaction";
 import { useUserStore } from "../stores/user";
 import { getAllTransactions } from "../services/apiClient";
 import Hero from "../components/layout/Hero.vue";
