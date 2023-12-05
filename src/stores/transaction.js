@@ -2,46 +2,38 @@ import { defineStore } from "pinia";
 import { getAllTransactions } from "../services/apiClient";
 export const useTransactionStore = defineStore("transactionsStore", {
   state: () => ({
-    transactions: [],
     balances: {},
     error: null,
   }),
   persist: true,
   actions: {
-    async fetchTransactions(userId) {
+    async calculateCryptoBalances(userId) {
       try {
-        const response = await getAllTransactions(userId);
-        this.transactions = response.data;
-        console.log(response.data);
-        console.log(this.transactions);
+        const userCryptoAssets = await getAllTransactions(userId);
+        const transactionsData = userCryptoAssets.data;
+
+        const balances = transactionsData.reduce((balance, transaction) => {
+          if (!balance[transaction.crypto_code]) {
+            balance[transaction.crypto_code] = 0;
+          }
+
+          if (transaction.action === "purchase") {
+            balance[transaction.crypto_code] += parseFloat(
+              transaction.crypto_amount
+            );
+          } else if (transaction.action === "sale") {
+            balance[transaction.crypto_code] -= parseFloat(
+              transaction.crypto_amount
+            );
+          }
+          return balance;
+        }, {});
+        console.log("balances", balances);
+        return balances;
       } catch (error) {
         console.error("Error al obtener las transacciones.");
-        throw error;
+        return {}; //por si ocurre un error, me devulve un arreglo vacío
       }
-
-      // if (transaction.action === "purchase") {
-      //   if (!this.balances[transaction.crypto_code]) {
-      //     this.balances[transaction.crypto_code] = parseFloat(
-      //       transaction.crypto_amount
-      //     );
-      //   } else {
-      //     this.balances[transaction.crypto_code] += parseFloat(
-      //       transaction.crypto_amount
-      //     );
-      //   }
-      // } else if (transaction.action === "sale") {
-      //   if (
-      //     this.balances[transaction.crypto_code] &&
-      //     this.balances[transaction.crypto_code] >=
-      //       parseFloat(transaction.crypto_amount)
-      //   ) {
-      //     this.balances[transaction.crypto_code] -= parseFloat(
-      //       transaction.crypto_amount
-      //     );
-      //   } else {
-      //     this.error = "No puedes realizar esta venta.";
-      //   }
-      // }
     },
   },
   getters: {

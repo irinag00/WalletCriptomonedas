@@ -1,10 +1,8 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
-import Balance from "../components/layout/Balance.vue";
 import Hero from "../components/layout/Hero.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
-import { useTransactionStore } from "../stores/transaction";
 import { newTransaction } from "../services/apiClient";
 import { initFlowbite } from "flowbite";
 import Swal from "sweetalert2";
@@ -12,7 +10,6 @@ import Swal from "sweetalert2";
 export default {
   components: {
     Navbar,
-    Balance,
     Hero,
   },
   data() {
@@ -21,7 +18,7 @@ export default {
       selectedCoin: null,
       arsValue: null,
       cryptoValue: null,
-      validationMoney: false,
+      validationMoney: null,
       nameSection: "Compra",
     };
   },
@@ -88,7 +85,6 @@ export default {
         this.validation();
         const userStore = useUserStore();
         const user = userStore.getUserId();
-        const transactionStore = useTransactionStore();
 
         if (this.validationMoney === false) {
           const result = await Swal.fire({
@@ -125,7 +121,6 @@ export default {
             } else {
               console.error("Hubo un error al enviar la información.");
             }
-            // await transactionStore.fetchTransactions(user);
           }
           this.resetInput();
         }
@@ -154,7 +149,6 @@ export default {
 <template>
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
-    <Balance></Balance>
     <Hero :sectionName="nameSection"></Hero>
     <div class="w-full">
       <div class="shadow-xl rounded-lg py-14 overflow-hidden m-0">

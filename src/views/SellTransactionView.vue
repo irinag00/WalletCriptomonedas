@@ -1,14 +1,13 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
-import Balance from "../components/layout/Balance.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
 import { useTransactionStore } from "../stores/transaction";
 import Hero from "../components/layout/Hero.vue";
+import Swal from "sweetalert2";
 export default {
   components: {
     Navbar,
-    Balance,
     Hero,
   },
   data() {
@@ -17,8 +16,10 @@ export default {
       selectedCoin: null,
       arsValue: null,
       cryptoValue: null,
-      validationMoney: false,
+      validationMoney: null,
       nameSection: "Venta",
+      user: "",
+      validationBalance: null,
     };
   },
   mounted() {
@@ -28,6 +29,9 @@ export default {
     const store = useApiDataStore();
     await store.fetchCryptoData();
     this.coinData = store.coinData;
+
+    const userStore = useUserStore();
+    this.user = userStore.getUserId();
   },
   methods: {
     handleSelection(coin, img, priceSale) {
@@ -46,6 +50,7 @@ export default {
       } else {
         this.cryptoValue = null; // lo borro porque si no hat datos del otro lado, me sigue apareciendo el último numero calculado.
       }
+      await this.validation();
     },
     async convertToArs() {
       if (
@@ -63,12 +68,13 @@ export default {
       } else {
         this.arsValue = null;
       }
+      await this.validation();
     },
     resetInput() {
       this.cryptoValue = "";
       this.arsValue = "";
     },
-    validation() {
+    async validation() {
       if (
         (this.arsValue <= 0 && this.cryptoValue <= 0) ||
         this.selectedCoin === null
@@ -76,17 +82,26 @@ export default {
         this.validationMoney = true;
       } else {
         this.validationMoney = false;
+        const store = useTransactionStore();
+        const balances = await store.calculateCryptoBalances(this.user);
+        const cryptoBalance = balances[this.selectedCoin.coin] || 0; // si balances[selectedCoin] es null, se le asignará el valor de null.
+
+        if (cryptoBalance < parseFloat(this.cryptoValue)) {
+          //si cryptoBalnces es menor al valor ingresado en el input, retorna true.
+          this.validationBalance = true;
+          console.log("no tienes dinero suficiente");
+        } else {
+          this.validationBalance = false;
+        }
       }
-      console.log(this.validationMoney);
     },
     async sell() {
       try {
-        this.validation();
-        const userStore = useUserStore();
-        const user = userStore.getUserId();
-        const transactionStore = useTransactionStore();
-
-        if (this.validationMoney === false) {
+        await this.validation();
+        if (
+          this.validationMoney === false &&
+          this.validationBalance === false
+        ) {
           const result = await Swal.fire({
             title: "Desea finalizar la transacción?",
             html: `Valor a vender: <b>${this.cryptoValue}${this.selectedCoin.coin}</b>. <br/> Valor a obtener: <b>${this.arsValue}ars</b>`,
@@ -106,7 +121,7 @@ export default {
               icon: "success",
             });
             let transaction = {
-              user_id: user,
+              user_id: this.user,
               action: "sale",
               crypto_code: this.selectedCoin.coin,
               crypto_amount: String(this.cryptoValue),
@@ -114,7 +129,9 @@ export default {
               datetime: this.formatDate,
             };
             console.log(transaction);
+
             //Envio los datos a la API
+
             // const response = await newTransaction(transaction);
             // if (response) {
             //   console.log("Información enviada correctamente.");
@@ -150,7 +167,6 @@ export default {
 <template>
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
-    <Balance></Balance>
     <Hero :sectionName="nameSection"></Hero>
     <div class="w-full">
       <div class="bg-white rounded-lg shadow-xl py-14 overflow-hidden">
@@ -257,6 +273,13 @@ export default {
             class="text-red-500 font-semibold flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
             >Ingrese un valor válido para poder realizar la compra.</span
           >
+          <span
+            v-show="validationBalance"
+            v-if="selectedCoin"
+            class="text-red-500 font-semibold flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
+            >No tienes suficiente cantidad de
+            {{ selectedCoin.coin.toUpperCase() }} para realizar la venta.</span
+          >
           <div
             v-if="selectedCoin"
             class="flex justify-center items-center flex-col sm:flex-row space-y-2 sm:space-y-0 mb-3"
@@ -282,7 +305,7 @@ export default {
           >
             <button
               type="button"
-              @click.prevent=""
+              @click.prevent="sell"
               class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
             >
               Realizar venta

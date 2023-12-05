@@ -1,5 +1,5 @@
 <script setup>
-import Balance from "../components/layout/Balance.vue";
+import Greeting from "../components/layout/Greeting.vue";
 import Navbar from "../components/layout/Navbar.vue";
 import QuotesTable from "../components/QuotesTable.vue";
 import { RouterLink } from "vue-router";
@@ -7,7 +7,7 @@ import { RouterLink } from "vue-router";
 <template>
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
-    <Balance></Balance>
+    <Greeting></Greeting>
     <div class="p-4">
       <QuotesTable></QuotesTable>
     </div>
