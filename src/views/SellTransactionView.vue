@@ -1,14 +1,17 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
+import Balance from "../components/Balance.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
 import { useTransactionStore } from "../stores/transaction";
+import { newTransaction } from "../services/apiClient";
 import Hero from "../components/layout/Hero.vue";
 import Swal from "sweetalert2";
 export default {
   components: {
     Navbar,
     Hero,
+    Balance,
   },
   data() {
     return {
@@ -20,6 +23,8 @@ export default {
       nameSection: "Venta",
       user: "",
       validationBalance: null,
+      balances: {},
+      showBalance: null,
     };
   },
   mounted() {
@@ -32,6 +37,9 @@ export default {
 
     const userStore = useUserStore();
     this.user = userStore.getUserId();
+
+    const balanceStore = useTransactionStore();
+    this.balances = await balanceStore.calculateCryptoBalances(this.user);
   },
   methods: {
     handleSelection(coin, img, priceSale) {
@@ -82,14 +90,13 @@ export default {
         this.validationMoney = true;
       } else {
         this.validationMoney = false;
-        const store = useTransactionStore();
-        const balances = await store.calculateCryptoBalances(this.user);
-        const cryptoBalance = balances[this.selectedCoin.coin] || 0; // si balances[selectedCoin] es null, se le asignará el valor de null.
+        // const store = useTransactionStore();
+        // const balances = await store.calculateCryptoBalances(this.user);
+        const cryptoBalance = this.balances[this.selectedCoin.coin] || 0; // si balances[selectedCoin] es null, se le asignará el valor de null.
 
         if (cryptoBalance < parseFloat(this.cryptoValue)) {
           //si cryptoBalnces es menor al valor ingresado en el input, retorna true.
           this.validationBalance = true;
-          console.log("no tienes dinero suficiente");
         } else {
           this.validationBalance = false;
         }
@@ -116,9 +123,10 @@ export default {
 
           if (result.isConfirmed) {
             Swal.fire({
-              title: "Compra realizada con éxito!",
+              title: "Venta realizada con éxito!",
               text: "Muchas gracias por confiar en nosotros.",
               icon: "success",
+              confirmButtonColor: "#04354c",
             });
             let transaction = {
               user_id: this.user,
@@ -131,14 +139,13 @@ export default {
             console.log(transaction);
 
             //Envio los datos a la API
-
-            // const response = await newTransaction(transaction);
-            // if (response) {
-            //   console.log("Información enviada correctamente.");
-            // } else {
-            //   console.error("Hubo un error al enviar la información.");
-            // }
-            // await transactionStore.fetchTransactions(user);
+            const response = await newTransaction(transaction);
+            if (response) {
+              console.log("Información enviada correctamente.");
+            } else {
+              console.error("Hubo un error al enviar la información.");
+            }
+            //actualizo los saldos desp de la venta
           }
           this.resetInput();
         }
@@ -314,5 +321,6 @@ export default {
         </div>
       </div>
     </div>
+    <Balance :balance="balances"></Balance>
   </div>
 </template>

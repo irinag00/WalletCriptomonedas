@@ -44,10 +44,12 @@ const submitForm = async () => {
     >
       <div class="flex justify-center text-center">
         <div class="max-w-md relative text-white">
-          <h1 class="mb-5 text-5xl font-bold">
+          <h1
+            class="mb-5 text-5xl font-bold [text-shadow:_1px_2px_0_rgb(0_0_0_/_40%)]"
+          >
             Descubrí el futuro de la economía digital
           </h1>
-          <p class="mb-5 font-bold">
+          <p class="mb-5 font-bold [text-shadow:_1px_2px_0_rgb(0_0_0_/_40%)]">
             Compra y vende criptomonedas de la manera más simple y con las
             mejores cotizaciones.
           </p>

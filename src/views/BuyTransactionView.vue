@@ -1,7 +1,9 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
 import Hero from "../components/layout/Hero.vue";
+import Balance from "../components/Balance.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
+import { useTransactionStore } from "../stores/transaction";
 import { useUserStore } from "../stores/user";
 import { newTransaction } from "../services/apiClient";
 import { initFlowbite } from "flowbite";
@@ -11,6 +13,7 @@ export default {
   components: {
     Navbar,
     Hero,
+    Balance,
   },
   data() {
     return {
@@ -19,7 +22,9 @@ export default {
       arsValue: null,
       cryptoValue: null,
       validationMoney: null,
+      user: "",
       nameSection: "Compra",
+      balances: {},
     };
   },
   mounted() {
@@ -29,6 +34,12 @@ export default {
     const store = useApiDataStore();
     await store.fetchCryptoData();
     this.coinData = store.coinData;
+
+    const userStore = useUserStore();
+    this.user = userStore.getUserId();
+
+    const balanceStore = useTransactionStore();
+    this.balances = await balanceStore.calculateCryptoBalances(this.user);
   },
   methods: {
     handleSelection(coin, img, priceBuy) {
@@ -83,9 +94,6 @@ export default {
     async purchase() {
       try {
         this.validation();
-        const userStore = useUserStore();
-        const user = userStore.getUserId();
-
         if (this.validationMoney === false) {
           const result = await Swal.fire({
             title: "Desea finalizar la transacción?",
@@ -104,9 +112,10 @@ export default {
               title: "Compra realizada con éxito!",
               text: "Muchas gracias por confiar en nosotros.",
               icon: "success",
+              confirmButtonColor: "#04354c",
             });
             let transaction = {
-              user_id: user,
+              user_id: this.user,
               action: "purchase",
               crypto_code: this.selectedCoin.coin,
               crypto_amount: String(this.cryptoValue),
@@ -281,7 +290,7 @@ export default {
             <button
               type="button"
               @click.prevent="purchase()"
-              class="text-white text-base sm:text-lg md:text-xl lg:text-xl xl:text-xl bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
+              class="text-white bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-5"
             >
               Realizar compra
             </button>
@@ -289,5 +298,6 @@ export default {
         </div>
       </div>
     </div>
+    <Balance :balance="balances"></Balance>
   </div>
 </template>
