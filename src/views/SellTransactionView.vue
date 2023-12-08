@@ -146,6 +146,10 @@ export default {
               console.error("Hubo un error al enviar la información.");
             }
             //actualizo los saldos desp de la venta
+            const balanceStore = useTransactionStore();
+            this.balances = await balanceStore.calculateCryptoBalances(
+              this.user
+            );
           }
           this.resetInput();
         }

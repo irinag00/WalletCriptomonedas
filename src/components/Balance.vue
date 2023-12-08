@@ -1,4 +1,5 @@
 <script>
+import { ref, watchEffect } from "vue";
 export default {
   props: {
     balance: {
@@ -10,6 +11,12 @@ export default {
     return {
       showBalance: null,
     };
+  },
+  setup(props) {
+    const dataCoin = ref(props.balance);
+
+    // Ejecuta inmediatamente, y cada vez que cambien sus dependencias reactivas
+    watchEffect(() => console.log(`watchEffect => `, dataCoin.value));
   },
   methods: {
     getCoinImage(clave) {

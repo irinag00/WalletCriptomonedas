@@ -132,6 +132,9 @@ export default {
             }
           }
           this.resetInput();
+          //le vuelvo a enviar los nuevos datos
+          const balanceStore = useTransactionStore();
+          this.balances = await balanceStore.calculateCryptoBalances(this.user);
         }
       } catch (error) {
         console.error("No se pudieron enviar los datos.");
