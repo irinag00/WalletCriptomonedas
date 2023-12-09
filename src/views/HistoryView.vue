@@ -4,10 +4,12 @@ import Balance from "../components/layout/Greeting.vue";
 import { useUserStore } from "../stores/user";
 import { getAllTransactions } from "../services/apiClient";
 import Hero from "../components/layout/Hero.vue";
+import HistoryTable from "../components/HistoryTable.vue";
 export default {
   components: {
     Navbar,
     Hero,
+    HistoryTable,
   },
   data() {
     return {
@@ -32,6 +34,7 @@ export default {
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
     <Hero :sectionName="nameSection"></Hero>
+    <HistoryTable :allTransactions="transactions"></HistoryTable>
     <!-- <div v-if="transactionStore.getTransactions.lenght === 0">
       Aun no has comprado nada
     </div> -->
