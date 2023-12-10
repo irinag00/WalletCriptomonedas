@@ -1,6 +1,5 @@
 <script>
 import { ref, watchEffect } from "vue";
-import Skeleton from "./Skeleton.vue";
 export default {
   props: {
     balance: {
@@ -57,7 +56,10 @@ export default {
                     {{ clave.toUpperCase() }}
                   </p>
                   <h5 class="mb-0 font-semibold text-lg">
-                    {{ valor }} {{ clave }}
+                    {{ valor.totalCryptoAmount }} {{ clave }}
+                  </h5>
+                  <h5 class="mb-0 font-semibold text-lg">
+                    {{ valor.totalMoney }}
                   </h5>
                 </div>
               </div>

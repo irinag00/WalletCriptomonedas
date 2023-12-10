@@ -35,7 +35,7 @@ const router = createRouter({
       component: HistoryView,
     },
     {
-      path: "/inversiones",
+      path: "/investments",
       name: "analisisInversiones",
       component: InvestmentView,
     },

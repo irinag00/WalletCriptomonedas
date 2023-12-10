@@ -176,11 +176,13 @@ export default {
           :index="selectedTransactionId"
         ></ModalTransaction>
         <ModalEditTransaction
+          @transaction-edit="loadTransaction"
           v-if="selectedTransactionId !== null && moneySelected !== null"
           :index="selectedTransactionId"
           :money="moneySelected"
         ></ModalEditTransaction>
         <ModalDelete
+          @transaction-delete="loadTransaction"
           v-if="selectedTransactionId !== null"
           :index="selectedTransactionId"
         ></ModalDelete>

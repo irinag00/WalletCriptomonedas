@@ -16,7 +16,7 @@ export default {
   data() {
     return {
       transactionDetails: {},
-      arsValue: 0,
+      arsValue: null,
     };
   },
   mounted() {
@@ -49,6 +49,7 @@ export default {
 
           const response = await updateTransaction(this.index, updateMoney);
           this.transactionDetails = response.data;
+
           this.$emit("transaction-edit");
 
           Toast.fire({
@@ -56,7 +57,7 @@ export default {
             title: "¡Transacción editada con éxito!",
           });
         }
-        this.arsValue = 0;
+        this.arsValue = null;
       } catch (error) {
         console.error("No se pude obtener la transacción", error);
       }
@@ -106,26 +107,24 @@ export default {
         </div>
         <!-- Modal body -->
         <div class="p-4 md:p-5 space-y-4 text-xl text-center text-black">
-          <form @submit.prevent="editTransaction">
-            <h3>
-              <span class="font-bold mr-3">Monto actual en ARS:</span>
-              $ {{ money }}
-            </h3>
-            <label
-              class="flex flex-row items-center gap-6 text-center justify-center"
-            >
-              <span class="font-bold">Monto a editar en ARS:</span>
-              <input
-                type="number"
-                step="any"
-                min="1"
-                class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-gray-50 border-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
-                placeholder="10000"
-                required
-                v-model="arsValue"
-              />
-            </label>
-          </form>
+          <h3>
+            <span class="font-bold mr-3">Monto actual en ARS:</span>
+            $ {{ money }}
+          </h3>
+          <label
+            class="flex flex-row items-center gap-6 text-center justify-center"
+          >
+            <span class="font-bold">Monto a editar en ARS:</span>
+            <input
+              type="number"
+              step="any"
+              min="1"
+              class="block p-2.5 w-500 z-20 text-sm text-gray-900 bg-gray-50 rounded-lg border-gray-50 border-2 border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-e-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:border-blue-500"
+              placeholder="10000"
+              required
+              v-model="arsValue"
+            />
+          </label>
         </div>
         <!-- Modal footer -->
         <div

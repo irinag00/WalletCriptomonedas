@@ -14,17 +14,33 @@ export const useTransactionStore = defineStore("transactionsStore", {
 
         const balances = transactionsData.reduce((balance, transaction) => {
           if (!balance[transaction.crypto_code]) {
-            balance[transaction.crypto_code] = 0;
+            balance[transaction.crypto_code] = {
+              totalCryptoAmount: 0,
+              totalMoney: 0,
+            };
           }
 
           if (transaction.action === "purchase") {
-            balance[transaction.crypto_code] += parseFloat(
+            balance[transaction.crypto_code].totalCryptoAmount += parseFloat(
               transaction.crypto_amount
             );
           } else if (transaction.action === "sale") {
-            balance[transaction.crypto_code] -= parseFloat(
+            balance[transaction.crypto_code].totalCryptoAmount -= parseFloat(
               transaction.crypto_amount
             );
+          }
+
+          //sumo cant de pesos
+          if (transaction.money) {
+            if (transaction.action === "purchase") {
+              balance[transaction.crypto_code].totalMoney += parseFloat(
+                transaction.money
+              );
+            } else if (transaction.action === "sale") {
+              balance[transaction.crypto_code].totalMoney -= parseFloat(
+                transaction.money
+              );
+            }
           }
           return balance;
         }, {});

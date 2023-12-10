@@ -123,12 +123,6 @@ export default {
           });
 
           if (result.isConfirmed) {
-            Swal.fire({
-              title: "Venta realizada con éxito!",
-              text: "Muchas gracias por confiar en nosotros.",
-              icon: "success",
-              confirmButtonColor: "#04354c",
-            });
             let transaction = {
               user_id: this.user,
               action: "sale",
@@ -141,6 +135,12 @@ export default {
 
             //Envio los datos a la API
             const response = await newTransaction(transaction);
+            Swal.fire({
+              title: "Venta realizada con éxito!",
+              text: "Muchas gracias por confiar en nosotros.",
+              icon: "success",
+              confirmButtonColor: "#04354c",
+            });
             if (response) {
               console.log("Información enviada correctamente.");
             } else {

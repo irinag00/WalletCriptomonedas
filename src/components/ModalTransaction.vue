@@ -1,6 +1,7 @@
 <script>
 import { initFlowbite } from "flowbite";
 import { getTransactionId } from "../services/apiClient";
+import Loader from "./loader.vue";
 export default {
   props: {
     index: {
@@ -8,9 +9,13 @@ export default {
       required: true,
     },
   },
+  components: {
+    Loader,
+  },
   data() {
     return {
       transactionDetails: {},
+      loading: false,
     };
   },
   mounted() {
@@ -28,6 +33,7 @@ export default {
       try {
         const response = await getTransactionId(this.index);
         this.transactionDetails = response.data;
+        this.loading = true;
       } catch (error) {
         console.error("No se pude obtener la transacción", error);
       }
@@ -44,6 +50,7 @@ export default {
       return date.toLocaleDateString("es-ES", options);
     },
   },
+  components: { Loader },
 };
 </script>
 <template>
@@ -76,7 +83,13 @@ export default {
           </button>
         </div>
         <!-- Modal body -->
-        <div class="p-4 md:p-5 space-y-4 text-xl text-center text-black">
+        <div v-if="!loading">
+          <Loader></Loader>
+        </div>
+        <div
+          class="p-4 md:p-5 space-y-4 text-xl text-center text-black"
+          v-if="loading"
+        >
           <h3>
             <span class="font-bold">Fecha: </span>
             {{ formatDate(transactionDetails.datetime) }}
