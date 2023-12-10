@@ -105,7 +105,7 @@ export default {
                 <button
                   @click="handleSelection(crypto._id)"
                   data-modal-target="static-modal"
-                  data-modal-show="static-modal"
+                  data-modal-toggle="static-modal"
                   type="button"
                 >
                   <i class="bi bi-search" style="font-size: large"></i>

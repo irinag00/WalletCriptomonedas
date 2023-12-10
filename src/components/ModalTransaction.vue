@@ -11,8 +11,11 @@ export default {
   data() {
     return {
       transactionDetails: {},
-      showModal: false,
     };
+  },
+  mounted() {
+    initFlowbite();
+    this.getTransactionDetails();
   },
   watch: {
     index() {
@@ -20,21 +23,14 @@ export default {
       this.getTransactionDetails();
     },
   },
-  mounted() {
-    initFlowbite();
-    this.getTransactionDetails();
-  },
   methods: {
     async getTransactionDetails() {
       try {
         const response = await getTransactionId(this.index);
         this.transactionDetails = response.data;
-        this.showModal = true;
       } catch (error) {
         console.error("No se pude obtener la transacción", error);
       }
-      console.log(this.transactionDetails);
-      console.log(this.showModal);
     },
     formatDate(dateTime) {
       const date = new Date(dateTime);
@@ -57,7 +53,6 @@ export default {
     tabindex="-1"
     aria-hidden="true"
     class="hidden overflow-y-auto overflow-x-hidden fixed top-0 right-0 left-0 z-50 justify-center items-center w-full md:inset-0 h-[calc(100%-1rem)] max-h-full"
-    v-show="showModal"
   >
     <div
       class="relative p-4 w-full max-w-2xl max-h-full bg-gradient-to-br from-green-400 to-blue-600 rounded-t"
