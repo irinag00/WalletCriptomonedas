@@ -1,5 +1,6 @@
 <script>
 import { ref, watchEffect } from "vue";
+import Skeleton from "./Skeleton.vue";
 export default {
   props: {
     balance: {

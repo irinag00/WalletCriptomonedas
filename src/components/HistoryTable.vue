@@ -1,5 +1,7 @@
-<script>
+<!-- <script>
 import ModalTransaction from "../components/ModalTransaction.vue";
+import { useUserStore } from "../stores/user";
+import { getAllTransactions } from "../services/apiClient";
 import { initFlowbite } from "flowbite";
 import { ref } from "vue";
 import ModalEditTransaction from "./ModalEditTransaction.vue";
@@ -19,21 +21,44 @@ export default {
       showModal: false,
     };
   },
+  watch: {
+    allTransactions() {
+      // Llamar a getTransactionDetails cada vez que el index cambia
+      this.$forceUpdate();
+    },
+  },
   mounted() {
     initFlowbite();
   },
   setup() {
     const selectedTransactionId = ref(null);
+    const moneySelected = ref(null);
     function handleSelection(id) {
       selectedTransactionId.value = id;
+    }
+    function handleSelectionEdit(id, money) {
+      selectedTransactionId.value = id;
+      moneySelected.value = money;
     }
     return {
       selectedTransactionId,
       handleSelection,
+      moneySelected,
+      handleSelectionEdit,
     };
   },
 
   methods: {
+    async loadTransaction() {
+      const userStore = useUserStore();
+      const user = userStore.getUserId();
+      try {
+        const response = await getAllTransactions(user);
+        this.transactions = response.data;
+      } catch (error) {
+        console.error("Error al obtener las transacciones.");
+      }
+    },
     formatDate(dateTime) {
       const date = new Date(dateTime);
       const options = {
@@ -49,8 +74,8 @@ export default {
 };
 </script>
 <template>
-  <!-- component -->
-  <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
+  component -->
+<!-- <div class="overflow-hidden rounded-lg border border-gray-200 shadow-md m-5">
     <table
       class="w-full border-collapse bg-white text-left text-sm text-gray-500"
     >
@@ -114,7 +139,7 @@ export default {
                 <span class="sr-only">Abrir Modal</span>
               </button>
               <button
-                @click="handleSelection(crypto._id)"
+                @click="handleSelectionEdit(crypto._id, crypto.money)"
                 data-modal-target="modal-edit"
                 data-modal-toggle="modal-edit"
                 type="button"
@@ -134,8 +159,9 @@ export default {
       :index="selectedTransactionId"
     ></ModalTransaction>
     <ModalEditTransaction
-      v-if="selectedTransactionId !== null"
+      v-if="selectedTransactionId !== null && moneySelected !== null"
       :index="selectedTransactionId"
+      :money="moneySelected"
     ></ModalEditTransaction>
   </div>
-</template>
+</template> -->

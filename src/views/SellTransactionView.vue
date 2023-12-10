@@ -1,6 +1,7 @@
 <script>
 import Navbar from "../components/layout/Navbar.vue";
 import Balance from "../components/Balance.vue";
+import Skeleton from "../components/Skeleton.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useUserStore } from "../stores/user";
 import { useTransactionStore } from "../stores/transaction";
@@ -12,6 +13,7 @@ export default {
     Navbar,
     Hero,
     Balance,
+    Skeleton,
   },
   data() {
     return {
@@ -25,6 +27,7 @@ export default {
       validationBalance: null,
       balances: {},
       showBalance: null,
+      loading: false,
     };
   },
   async created() {
@@ -37,6 +40,7 @@ export default {
 
     const balanceStore = useTransactionStore();
     this.balances = await balanceStore.calculateCryptoBalances(this.user);
+    this.loading = true;
   },
   methods: {
     handleSelection(coin, img, priceSale) {
@@ -322,6 +326,20 @@ export default {
         </div>
       </div>
     </div>
-    <Balance :balance="balances"></Balance>
+    <div
+      v-if="!loading"
+      class="grid min-[1800px]:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mb-4 mt-5"
+    >
+      <div
+        v-for="index in 4"
+        :key="index"
+        class="bg-gray-200 rounded-2xl bg-clip-border mb-6"
+      >
+        <Skeleton></Skeleton>
+      </div>
+    </div>
+    <div v-if="loading">
+      <Balance :balance="balances"></Balance>
+    </div>
   </div>
 </template>

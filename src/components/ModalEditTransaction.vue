@@ -1,9 +1,14 @@
 <script>
 import { initFlowbite } from "flowbite";
-import { getTransactionId, updateTransaction } from "../services/apiClient";
+import { updateTransaction } from "../services/apiClient";
+import Swal from "sweetalert2";
 export default {
   props: {
     index: {
+      type: String,
+      required: true,
+    },
+    money: {
       type: String,
       required: true,
     },
@@ -16,23 +21,42 @@ export default {
   },
   mounted() {
     initFlowbite();
-    // this.getTransactionDetails();
   },
   watch: {
     index() {
-      // Llamar a getTransactionDetails cada vez que el index cambia
-      //   this.editTransaction();
+      console.log(this.index);
+      console.log(this.money);
     },
   },
   methods: {
     async editTransaction() {
       try {
-        const updateMoney = {
-          money: String(this.arsValue),
-        };
-        const response = await updateTransaction(this.index, updateMoney);
-        this.transactionDetails = response.data;
-        console.log(this.transactionDetails);
+        if (this.arsValue > 0) {
+          const updateMoney = {
+            money: String(this.arsValue),
+          };
+          const Toast = Swal.mixin({
+            toast: true,
+            position: "top-end",
+            showConfirmButton: false,
+            timer: 3000,
+            timerProgressBar: true,
+            didOpen: (toast) => {
+              toast.onmouseenter = Swal.stopTimer;
+              toast.onmouseleave = Swal.resumeTimer;
+            },
+          });
+
+          const response = await updateTransaction(this.index, updateMoney);
+          this.transactionDetails = response.data;
+          this.$emit("transaction-edit");
+
+          Toast.fire({
+            icon: "success",
+            title: "¡Transacción editada con éxito!",
+          });
+        }
+        this.arsValue = 0;
       } catch (error) {
         console.error("No se pude obtener la transacción", error);
       }
@@ -84,8 +108,8 @@ export default {
         <div class="p-4 md:p-5 space-y-4 text-xl text-center text-black">
           <form @submit.prevent="editTransaction">
             <h3>
-              <span class="font-bold">Monto actual en ARS:</span>
-              $
+              <span class="font-bold mr-3">Monto actual en ARS:</span>
+              $ {{ money }}
             </h3>
             <label
               class="flex flex-row items-center gap-6 text-center justify-center"
@@ -105,19 +129,20 @@ export default {
         </div>
         <!-- Modal footer -->
         <div
-          class="flex p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 justify-center"
+          class="flex gap-6 p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 justify-center"
         >
           <button
             data-modal-hide="modal-edit"
             type="button"
             class="text-white text-normal bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-50"
+            @click="editTransaction"
           >
             Editar
           </button>
           <button
             data-modal-hide="modal-edit"
             type="button"
-            class="text-white text-normal bg-gradient-to-br from-green-400 to-blue-600 hover:bg-gradient-to-bl focus:ring-4 focus:outline-none focus:ring-green-200 dark:focus:ring-green-800 font-medium rounded-lg text-sm px-10 py-2.5 text-center mt-50"
+            class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
             Cerrar
           </button>
