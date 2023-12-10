@@ -1,10 +1,34 @@
 <script>
+import ModalTransaction from "../components/ModalTransaction.vue";
+import { initFlowbite } from "flowbite";
+import { ref } from "vue";
 export default {
   props: {
     allTransactions: {
       type: Object,
       required: true,
     },
+  },
+  components: {
+    ModalTransaction,
+  },
+  data() {
+    return {
+      showModal: false,
+    };
+  },
+  setup() {
+    const selectedTransactionId = ref(null);
+    function handleSelection(id) {
+      selectedTransactionId.value = id;
+    }
+    return {
+      selectedTransactionId,
+      handleSelection,
+    };
+  },
+  mounted() {
+    initFlowbite();
   },
   methods: {
     formatDate(dateTime) {
@@ -46,7 +70,7 @@ export default {
       <tbody class="divide-y divide-gray-100 border-t border-gray-100">
         <tr
           v-for="(crypto, index) in allTransactions"
-          :key="index"
+          :key="crypto._id"
           class="hover:bg-gray-50"
         >
           <td class="px-6 py-4">
@@ -77,16 +101,31 @@ export default {
           </td>
           <td class="px-6 py-4">
             <div class="flex justify-end gap-6">
-              <button>
-                <i class="bi bi-trash3" style="font-size: large"></i>
-              </button>
+              <div>
+                <button
+                  @click="handleSelection(crypto._id)"
+                  data-modal-target="static-modal"
+                  data-modal-show="static-modal"
+                  type="button"
+                >
+                  <i class="bi bi-search" style="font-size: large"></i>
+                </button>
+              </div>
               <button>
                 <i class="bi bi-pencil-square" style="font-size: large"></i>
+              </button>
+              <button>
+                <i class="bi bi-trash3" style="font-size: large"></i>
               </button>
             </div>
           </td>
         </tr>
       </tbody>
     </table>
+    <ModalTransaction
+      v-if="selectedTransactionId !== null"
+      :allTransactions="allTransactions"
+      :index="selectedTransactionId"
+    ></ModalTransaction>
   </div>
 </template>

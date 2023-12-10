@@ -7,6 +7,9 @@ const apiClient = axios.create({
 export function getAllTransactions(userId) {
   return apiClient.get(`/transactions?q={"user_id": "${userId}"}`);
 }
+export function getTransactionId(id) {
+  return apiClient.get(`/transactions/${id}}`);
+}
 export function newTransaction(transaction) {
   return apiClient.post("/transactions", transaction);
 }

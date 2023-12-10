@@ -23,7 +23,6 @@ export default {
     try {
       const response = await getAllTransactions(user);
       this.transactions = response.data;
-      console.log(this.transactions);
     } catch (error) {
       console.error("Error al obtener las transacciones.");
     }

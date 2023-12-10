@@ -27,9 +27,6 @@ export default {
       showBalance: null,
     };
   },
-  mounted() {
-    initFlowbite();
-  },
   async created() {
     const store = useApiDataStore();
     await store.fetchCryptoData();
