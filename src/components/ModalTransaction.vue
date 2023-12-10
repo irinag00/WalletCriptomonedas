@@ -3,10 +3,6 @@ import { initFlowbite } from "flowbite";
 import { getTransactionId } from "../services/apiClient";
 export default {
   props: {
-    allTransactions: {
-      type: Object,
-      required: true,
-    },
     index: {
       type: String,
       required: true,
@@ -24,12 +20,9 @@ export default {
       this.getTransactionDetails();
     },
   },
-  created() {
-    this.getTransactionDetails();
-  },
   mounted() {
     initFlowbite();
-    // this.getTransactionDetails();
+    this.getTransactionDetails();
   },
   methods: {
     async getTransactionDetails() {

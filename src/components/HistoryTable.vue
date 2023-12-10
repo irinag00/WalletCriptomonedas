@@ -109,6 +109,7 @@ export default {
                   type="button"
                 >
                   <i class="bi bi-search" style="font-size: large"></i>
+                  <span class="sr-only">Abrir Modal</span>
                 </button>
               </div>
               <button>
