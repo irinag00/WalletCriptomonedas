@@ -37,14 +37,14 @@ export default {
       </h3>
     </div>
   </div>
-  <div v-else>
+  <div v-else class="border-t border-gray-200 mt-10">
     <h2 class="text-2xl font-bold mt-5">Mis saldos</h2>
     <div
       class="grid min-[1800px]:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mb-4 mt-5"
     >
       <div v-for="(valor, clave) in balance" :key="clave">
         <div
-          class="relative flex flex-col mb-6 break-words shadow-md rounded-2xl bg-clip-border overflow-hidden bg-gray-200"
+          class="relative flex flex-col mb-6 break-words shadow-md rounded-2xl bg-clip-border overflow-hidden bg-gray-100 hover:bg-gray-200"
         >
           <div class="flex-auto p-4">
             <div class="flex flex-wrap -mx-3">
@@ -56,14 +56,15 @@ export default {
                     {{ clave.toUpperCase() }}
                   </p>
                   <h5 class="mb-0 font-semibold text-lg">
-                    {{ valor.totalCryptoAmount }} {{ clave }}
+                    <span>Total en {{ clave.toUpperCase() }} </span> =
+                    {{ valor.totalCryptoAmount }}
                   </h5>
                   <h5 class="mb-0 font-semibold text-lg">
-                    {{ valor.totalMoney }}
+                    <span>ARS</span> = ${{ valor.totalMoney }}
                   </h5>
                 </div>
               </div>
-              <div class="w-4/12 max-w-full px-3 ml-auto text-right flex-0">
+              <div class="w-4/12 max-w-full px-3 text-right flex-0">
                 <div
                   class="inline-block w-12 h-12 text-center rounded-lg shadow-soft-2xl"
                 >

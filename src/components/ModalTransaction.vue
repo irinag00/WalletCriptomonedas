@@ -25,6 +25,7 @@ export default {
   watch: {
     index() {
       // Llamar a getTransactionDetails cada vez que el index cambia
+      this.loading = false;
       this.getTransactionDetails();
     },
   },
@@ -83,7 +84,7 @@ export default {
           </button>
         </div>
         <!-- Modal body -->
-        <div v-if="!loading">
+        <div class="m-10 md:p-5 space-y-4 flex justify-center" v-if="!loading">
           <Loader></Loader>
         </div>
         <div
