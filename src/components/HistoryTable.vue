@@ -2,6 +2,7 @@
 import ModalTransaction from "../components/ModalTransaction.vue";
 import { initFlowbite } from "flowbite";
 import { ref } from "vue";
+import ModalEditTransaction from "./ModalEditTransaction.vue";
 export default {
   props: {
     allTransactions: {
@@ -11,11 +12,15 @@ export default {
   },
   components: {
     ModalTransaction,
+    ModalEditTransaction,
   },
   data() {
     return {
       showModal: false,
     };
+  },
+  mounted() {
+    initFlowbite();
   },
   setup() {
     const selectedTransactionId = ref(null);
@@ -27,9 +32,7 @@ export default {
       handleSelection,
     };
   },
-  mounted() {
-    initFlowbite();
-  },
+
   methods: {
     formatDate(dateTime) {
       const date = new Date(dateTime);
@@ -101,18 +104,21 @@ export default {
           </td>
           <td class="px-6 py-4">
             <div class="flex justify-end gap-6">
-              <div>
-                <button
-                  @click="handleSelection(crypto._id)"
-                  data-modal-target="static-modal"
-                  data-modal-toggle="static-modal"
-                  type="button"
-                >
-                  <i class="bi bi-search" style="font-size: large"></i>
-                  <span class="sr-only">Abrir Modal</span>
-                </button>
-              </div>
-              <button>
+              <button
+                @click="handleSelection(crypto._id)"
+                data-modal-target="static-modal"
+                data-modal-toggle="static-modal"
+                type="button"
+              >
+                <i class="bi bi-search" style="font-size: large"></i>
+                <span class="sr-only">Abrir Modal</span>
+              </button>
+              <button
+                @click="handleSelection(crypto._id)"
+                data-modal-target="modal-edit"
+                data-modal-toggle="modal-edit"
+                type="button"
+              >
                 <i class="bi bi-pencil-square" style="font-size: large"></i>
               </button>
               <button>
@@ -125,8 +131,11 @@ export default {
     </table>
     <ModalTransaction
       v-if="selectedTransactionId !== null"
-      :allTransactions="allTransactions"
       :index="selectedTransactionId"
     ></ModalTransaction>
+    <ModalEditTransaction
+      v-if="selectedTransactionId !== null"
+      :index="selectedTransactionId"
+    ></ModalEditTransaction>
   </div>
 </template>
