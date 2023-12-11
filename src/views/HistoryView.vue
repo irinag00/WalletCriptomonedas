@@ -54,21 +54,22 @@ export default {
       try {
         const response = await getAllTransactions(user);
         this.allTransactions = response.data;
+        console.log(this.allTransactions);
         this.loading = true;
       } catch (error) {
         console.error("Error al obtener las transacciones.");
       }
     },
-    formatDate(dateTime) {
-      const date = new Date(dateTime);
-      const options = {
-        year: "numeric",
-        month: "numeric",
-        day: "numeric",
-        hour: "numeric",
-        minute: "numeric",
-      };
-      return date.toLocaleDateString("es-ES", options);
+    formatDate(date) {
+      // const dateTime = new Date(date);
+      const fechaHora = new Date(date);
+      const dia = String(fechaHora.getUTCDate()).padStart(2, "0");
+      const mes = String(fechaHora.getUTCMonth() + 1).padStart(2, "0");
+      const año = fechaHora.getUTCFullYear();
+      const horas = String(fechaHora.getUTCHours()).padStart(2, "0");
+      const minutos = String(fechaHora.getUTCMinutes()).padStart(2, "0");
+
+      return `${mes}/${dia}/${año}, ${horas}:${minutos}`;
     },
   },
 };

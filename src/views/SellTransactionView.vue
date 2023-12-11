@@ -168,7 +168,6 @@ export default {
       const hh = String(dateTime.getHours()).padStart(2, "0");
       const ss = String(dateTime.getMinutes()).padStart(2, "0");
 
-      // today = dd + "-" + mm + "-" + yyyy + " " + hh + ":" + ss;
       const formattedDateTime = `${dd}-${mm}-${yyyy} ${hh}:${ss}`;
 
       return formattedDateTime;
