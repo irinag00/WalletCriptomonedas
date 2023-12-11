@@ -8,27 +8,34 @@ export default {
       type: String,
       required: true,
     },
-    money: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
       transactionDetails: {},
       arsValue: null,
+      cryptoValue: null,
+      dateValue: null,
     };
   },
   mounted() {
     initFlowbite();
+    this.getTransactionDetails();
   },
   watch: {
     index() {
-      console.log(this.index);
-      console.log(this.money);
+      this.getTransactionDetails();
     },
   },
   methods: {
+    async getTransactionDetails() {
+      try {
+        const response = await getTransactionId(this.index);
+        this.transactionDetails = response.data;
+        // this.loading = true;
+      } catch (error) {
+        console.error("No se pude obtener la transacción", error);
+      }
+    },
     async editTransaction() {
       try {
         if (this.arsValue > 0) {
@@ -47,7 +54,7 @@ export default {
             },
           });
 
-          const response = await updateTransaction(this.index, updateMoney);
+          // const response = await updateTransaction(this.index, updateMoney);
           this.transactionDetails = response.data;
 
           this.$emit("transaction-edit");
@@ -106,7 +113,99 @@ export default {
           </button>
         </div>
         <!-- Modal body -->
-        <div class="p-4 md:p-5 space-y-4 text-xl text-center text-black">
+
+        <form
+          class="p-4 md:p-5"
+          @submit.prevent="editTransaction"
+          v-if="transactionDetails"
+        >
+          <div class="grid gap-4 mb-4 grid-cols-2">
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Tipo de Transacción</label
+              >
+              <select
+                v-model="selectActionValue"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              >
+                <option value="purchase">Compra</option>
+                <option value="sale">Venta</option>
+              </select>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Criptomoneda</label
+              >
+              <select
+                v-model="selectCryptoValue"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+              >
+                <option>btc</option>
+                <option>dai</option>
+                <option>eth</option>
+                <option>usdc</option>
+              </select>
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                for="price"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Monto en CRIPTO</label
+              >
+              <input
+                type="number"
+                name="price"
+                id="price"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="2999"
+                required=""
+                v-model="cryptoValue"
+              />
+            </div>
+            <div class="col-span-2 sm:col-span-1">
+              <label
+                for="price"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Monto en ARS</label
+              >
+              <input
+                type="number"
+                name="price"
+                id="price"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="$2999"
+                required=""
+                v-model="arsValue"
+              />
+            </div>
+            <div class="col-span-2">
+              <label
+                for="name"
+                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+                >Fecha</label
+              >
+              <input
+                type="text"
+                name="name"
+                id="name"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+                placeholder="22/11/2023 12:34"
+                required=""
+                v-model="dateValue"
+              />
+            </div>
+          </div>
+          <button
+            type="submit"
+            class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+          >
+            Editar
+          </button>
+        </form>
+
+        <!-- <div class="p-4 md:p-5 space-y-4 text-xl text-center text-black">
           <h3>
             <span class="font-bold mr-3">Monto actual en ARS:</span>
             $ {{ money }}
@@ -125,9 +224,9 @@ export default {
               v-model="arsValue"
             />
           </label>
-        </div>
+        </div> -->
         <!-- Modal footer -->
-        <div
+        <!-- <div
           class="flex gap-6 p-4 md:p-5 border-t border-gray-200 rounded-b dark:border-gray-600 justify-center"
         >
           <button
@@ -144,8 +243,8 @@ export default {
             class="ms-3 text-gray-500 bg-white hover:bg-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 rounded-lg border border-gray-200 text-sm font-medium px-5 py-2.5 hover:text-gray-900 focus:z-10 dark:bg-gray-700 dark:text-gray-300 dark:border-gray-500 dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-gray-600"
           >
             Cerrar
-          </button>
-        </div>
+          </button> -->
+        <!-- </div> -->
       </div>
     </div>
   </div>

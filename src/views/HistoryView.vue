@@ -31,19 +31,12 @@ export default {
   },
   setup() {
     const selectedTransactionId = ref(null);
-    const moneySelected = ref(null);
     function handleSelection(id) {
       selectedTransactionId.value = id;
-    }
-    function handleSelectionEdit(id, money) {
-      selectedTransactionId.value = id;
-      moneySelected.value = money;
     }
     return {
       selectedTransactionId,
       handleSelection,
-      moneySelected,
-      handleSelectionEdit,
     };
   },
 
@@ -152,7 +145,7 @@ export default {
                     <span class="sr-only">Abrir Modal</span>
                   </button>
                   <button
-                    @click="handleSelectionEdit(crypto._id, crypto.money)"
+                    @click="handleSelection(crypto._id)"
                     data-modal-target="modal-edit"
                     data-modal-toggle="modal-edit"
                     type="button"
@@ -180,7 +173,6 @@ export default {
           @transaction-edit="loadTransaction"
           v-if="selectedTransactionId !== null && moneySelected !== null"
           :index="selectedTransactionId"
-          :money="moneySelected"
         ></ModalEditTransaction>
         <ModalDelete
           @transaction-delete="loadTransaction"
