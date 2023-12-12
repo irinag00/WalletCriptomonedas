@@ -119,9 +119,10 @@ export default {
             </tfoot>
           </table>
         </div>
+        <InvestmentAnalysis></InvestmentAnalysis>
       </div>
     </div>
-    <InvestmentAnalysis></InvestmentAnalysis>
+
     <Footer></Footer>
   </div>
 </template>
