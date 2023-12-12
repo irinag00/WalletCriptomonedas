@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-white rounded-lg shadow dark:bg-gray-800">
+  <footer class="absolute bottom-0 bg-white rounded-lg">
     <div
       class="w-full max-w-screen-xl p-4 md:flex md:items-center md:justify-between"
     >
