@@ -1,7 +1,7 @@
 <script>
 import { initFlowbite } from "flowbite";
 import { getTransactionId } from "../services/apiClient";
-import Loader from "./loader.vue";
+import Loader from "./Loader.vue";
 export default {
   props: {
     index: {
