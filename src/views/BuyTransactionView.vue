@@ -3,6 +3,7 @@ import Navbar from "../components/layout/Navbar.vue";
 import Hero from "../components/layout/Hero.vue";
 import Balance from "../components/Balance.vue";
 import Skeleton from "../components/Skeleton.vue";
+import Footer from "../components/layout/Footer.vue";
 import { useApiDataStore } from "../stores/apiCryptoData";
 import { useTransactionStore } from "../stores/transaction";
 import { useUserStore } from "../stores/user";
@@ -16,6 +17,7 @@ export default {
     Hero,
     Balance,
     Skeleton,
+    Footer,
   },
   data() {
     return {
@@ -320,5 +322,6 @@ export default {
     <div v-if="loading">
       <Balance :balance="balances"></Balance>
     </div>
+    <Footer></Footer>
   </div>
 </template>

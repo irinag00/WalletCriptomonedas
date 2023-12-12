@@ -1,8 +1,20 @@
 <script setup>
+import Footer from "../components/layout/Footer.vue";
 import Greeting from "../components/layout/Greeting.vue";
 import Navbar from "../components/layout/Navbar.vue";
 import QuotesTable from "../components/QuotesTable.vue";
+import { useTransactionStore } from "../stores/transaction";
+import { useUserStore } from "../stores/user";
+import { ref, onMounted } from "vue";
 import { RouterLink } from "vue-router";
+// const transactionStore = useTransactionStore();
+// const balances = ref({});
+
+// const store = useUserStore();
+// const user = store.getUserId();
+// onMounted(async () => {
+//   balances.value = await transactionStore.calculateCryptoBalances(user);
+// });
 </script>
 <template>
   <Navbar></Navbar>
@@ -31,5 +43,6 @@ import { RouterLink } from "vue-router";
         </button>
       </RouterLink>
     </div>
+    <Footer></Footer>
   </div>
 </template>

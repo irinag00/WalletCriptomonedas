@@ -29,7 +29,7 @@ export default {
 };
 </script>
 <template>
-  <div v-if="!loading" class="flex justify-center mt-40">
+  <div v-if="!loading" class="flex justify-center mt-40 mb-30">
     <Loader></Loader>
   </div>
   <div v-if="loading">

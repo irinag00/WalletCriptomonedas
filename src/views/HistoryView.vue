@@ -2,6 +2,7 @@
 import Navbar from "../components/layout/Navbar.vue";
 import Hero from "../components/layout/Hero.vue";
 import ModalTransaction from "../components/ModalTransaction.vue";
+import Footer from "../components/layout/Footer.vue";
 import ModalEditTransaction from "../components/ModalEditTransaction.vue";
 import { initFlowbite } from "flowbite";
 import { ref } from "vue";
@@ -17,6 +18,7 @@ export default {
     ModalEditTransaction,
     ModalDelete,
     Loader,
+    Footer,
   },
   data() {
     return {
@@ -71,7 +73,7 @@ export default {
   <Navbar></Navbar>
   <div class="p-4 sm:ml-64">
     <Hero :sectionName="nameSection"></Hero>
-    <div v-if="!loading" class="flex justify-center mt-40">
+    <div v-if="!loading" class="flex justify-center mt-40 mb-40">
       <Loader></Loader>
     </div>
     <div v-if="loading">
@@ -205,5 +207,6 @@ export default {
         </div>
       </div>
     </div>
+    <Footer></Footer>
   </div>
 </template>

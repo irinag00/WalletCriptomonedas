@@ -2,6 +2,7 @@
 import Navbar from "../components/layout/Navbar.vue";
 import Hero from "../components/layout/Hero.vue";
 import Loader from "../components/Loader.vue";
+import Footer from "../components/layout/Footer.vue";
 import { useUserStore } from "../stores/user";
 import { useTransactionStore } from "../stores/transaction";
 import InvestmentAnalysis from "../components/InvestmentAnalysis.vue";
@@ -11,6 +12,7 @@ export default {
     Hero,
     InvestmentAnalysis,
     Loader,
+    Footer,
   },
   data() {
     return {
@@ -120,5 +122,6 @@ export default {
       </div>
     </div>
     <InvestmentAnalysis></InvestmentAnalysis>
+    <Footer></Footer>
   </div>
 </template>
