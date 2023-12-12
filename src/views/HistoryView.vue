@@ -78,7 +78,7 @@ export default {
     </div>
     <div v-if="loading">
       <div v-if="Object.keys(allTransactions).length === 0">
-        <div className="flex flex-col items-center justify-center m-3 p-3">
+        <div className="flex flex-col items-center justify-center mt-24 p-3">
           <i
             class="bi bi-cash-coin mb-1 text-gray-600"
             style="font-size: 100px"
