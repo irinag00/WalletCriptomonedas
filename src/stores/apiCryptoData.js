@@ -28,8 +28,8 @@ export const useApiDataStore = defineStore("apiData", {
             name: coinName,
             coin: coin,
             img: `src/assets/img-coin/${coin}.png`,
-            priceBuy: response.data.ask,
-            priceSale: response.data.bid,
+            priceBuy: response.data.totalAsk,
+            priceSale: response.data.totalBid,
           });
         });
         this.dataLoaded = true; // Marca que los datos se han cargado

@@ -12,9 +12,6 @@ export default {
       showBalance: null,
     };
   },
-  setup(props) {
-    const dataCoin = ref(props.balance);
-  },
   methods: {
     getCoinImage(clave) {
       return `src/assets/img-coin/${clave}.png`;
@@ -42,7 +39,11 @@ export default {
     <div
       class="grid min-[1800px]:grid-cols-4 md:grid-cols-2 grid-cols-1 gap-4 mb-4 mt-5"
     >
-      <div v-for="(valor, clave) in balance" :key="clave">
+      <div
+        v-for="(valor, clave) in balance"
+        :key="clave"
+        v-show="valor.totalCryptoAmount > 0"
+      >
         <div
           class="relative flex flex-col mb-6 break-words shadow-md rounded-2xl bg-clip-border overflow-hidden bg-gray-100 hover:bg-gray-200"
         >
@@ -60,7 +61,7 @@ export default {
                     {{ valor.totalCryptoAmount }}
                   </h5>
                   <h5 class="mb-0 font-semibold text-lg">
-                    <span>ARS</span> = ${{ valor.totalMoney }}
+                    <span>ARS</span> = ${{ valor.totalMoney.toFixed(2) }}
                   </h5>
                 </div>
               </div>
