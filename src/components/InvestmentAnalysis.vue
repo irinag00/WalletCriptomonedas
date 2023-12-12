@@ -29,20 +29,6 @@ export default {
 };
 </script>
 <template>
-  <!-- <div v-if="Object.keys(balances).length === 0">
-    <div className="flex flex-col items-center justify-center m-3 p-3">
-      <i
-        class="bi bi-cash-coin mb-1 text-gray-600"
-        style="font-size: 100px"
-      ></i>
-      <h2 class="text-2xl font-bold text-cyan-600 my-2">
-        ¡Aún no has realizado transacciones!
-      </h2>
-      <h3 class="text-base font-semibold text-gray-600 my-2">
-        Empieza a comprar y vender criptos para cambiar tu vida...
-      </h3>
-    </div>
-  </div> -->
   <div v-if="!loading" class="flex justify-center mt-40">
     <Loader></Loader>
   </div>

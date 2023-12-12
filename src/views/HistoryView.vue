@@ -75,112 +75,134 @@ export default {
       <Loader></Loader>
     </div>
     <div v-if="loading">
-      <div
-        class="relative overflow-x-auto rounded-lg border border-gray-200 shadow-md m-5"
-      >
-        <table
-          class="w-full border-collapse bg-white text-left text-base text-gray-500"
+      <div v-if="Object.keys(allTransactions).length === 0">
+        <div className="flex flex-col items-center justify-center m-3 p-3">
+          <i
+            class="bi bi-cash-coin mb-1 text-gray-600"
+            style="font-size: 100px"
+          ></i>
+          <h2 class="text-2xl font-bold text-cyan-600 my-2">
+            ¡Aún no has realizado transacciones!
+          </h2>
+          <h3 class="text-base font-semibold text-gray-600 my-2">
+            Empieza a comprar y vender criptos para cambiar tu vida...
+          </h3>
+        </div>
+      </div>
+      <div v-else>
+        <div
+          class="relative overflow-x-auto rounded-lg border border-gray-200 shadow-md m-5"
         >
-          <thead class="bg-gray-50 text-center">
-            <tr>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Fecha
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Tipo de Transacción
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Cantidad
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Moneda
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900">
-                Total
-              </th>
-              <th scope="col" class="px-6 py-4 font-medium text-gray-900"></th>
-            </tr>
-          </thead>
-          <tbody
-            class="divide-y divide-gray-100 border-t border-gray-100 text-center"
+          <table
+            class="w-full border-collapse bg-white text-left text-base text-gray-500"
           >
-            <tr
-              v-for="(crypto, index) in allTransactions"
-              :key="crypto._id"
-              class="hover:bg-gray-50"
+            <thead class="bg-gray-50 text-center">
+              <tr>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                  Fecha
+                </th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                  Tipo de Transacción
+                </th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                  Cantidad
+                </th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                  Moneda
+                </th>
+                <th scope="col" class="px-6 py-4 font-medium text-gray-900">
+                  Total
+                </th>
+                <th
+                  scope="col"
+                  class="px-6 py-4 font-medium text-gray-900"
+                ></th>
+              </tr>
+            </thead>
+            <tbody
+              class="divide-y divide-gray-100 border-t border-gray-100 text-center"
             >
-              <td class="px-6 py-4">
-                <span>{{ formatDate(crypto.datetime) }}</span>
-              </td>
-              <td class="px-6 py-4">
-                <span
-                  v-if="crypto.action === 'purchase'"
-                  class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-normal font-semibold text-green-600"
-                >
-                  <span class="">Compra</span>
-                </span>
-                <span
-                  v-else-if="crypto.action === 'sale'"
-                  class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-normal font-semibold text-red-600"
-                >
-                  <span class="">Venta</span></span
-                >
-              </td>
-              <td class="px-6 py-4">
-                <h3>{{ crypto.crypto_amount }}</h3>
-              </td>
-              <td class="px-6 py-4">
-                <h3>{{ crypto.crypto_code.toUpperCase() }}</h3>
-              </td>
-              <td class="px-6 py-4">
-                <h3>{{ crypto.money }} ARS</h3>
-              </td>
-              <td class="px-6 py-4">
-                <div class="flex justify-end gap-6">
-                  <button
-                    @click="handleSelection(crypto._id)"
-                    data-modal-target="static-modal"
-                    data-modal-toggle="static-modal"
-                    type="button"
+              <tr
+                v-for="(crypto, index) in allTransactions"
+                :key="crypto._id"
+                class="hover:bg-gray-50"
+              >
+                <td class="px-6 py-4">
+                  <span>{{ formatDate(crypto.datetime) }}</span>
+                </td>
+                <td class="px-6 py-4">
+                  <span
+                    v-if="crypto.action === 'purchase'"
+                    class="inline-flex items-center gap-1 rounded-full bg-green-50 px-2 py-1 text-normal font-semibold text-green-600"
                   >
-                    <i class="bi bi-search" style="font-size: large"></i>
-                    <span class="sr-only">Abrir Modal</span>
-                  </button>
-                  <button
-                    @click="handleSelection(crypto._id)"
-                    data-modal-target="modal-edit"
-                    data-modal-toggle="modal-edit"
-                    type="button"
+                    <span class="">Compra</span>
+                  </span>
+                  <span
+                    v-else-if="crypto.action === 'sale'"
+                    class="inline-flex items-center gap-1 rounded-full bg-red-50 px-2 py-1 text-normal font-semibold text-red-600"
                   >
-                    <i class="bi bi-pencil-square" style="font-size: large"></i>
-                  </button>
-                  <button
-                    @click="handleSelection(crypto._id)"
-                    data-modal-target="popup-modal"
-                    data-modal-toggle="popup-modal"
-                    type="button"
+                    <span class="">Venta</span></span
                   >
-                    <i class="bi bi-trash3" style="font-size: large"></i>
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-        <ModalTransaction
-          v-if="selectedTransactionId !== null"
-          :index="selectedTransactionId"
-        ></ModalTransaction>
-        <ModalEditTransaction
-          @transaction-edit="loadTransaction"
-          v-if="selectedTransactionId !== null"
-          :index="selectedTransactionId"
-        ></ModalEditTransaction>
-        <ModalDelete
-          @transaction-delete="loadTransaction"
-          v-if="selectedTransactionId !== null"
-          :index="selectedTransactionId"
-        ></ModalDelete>
+                </td>
+                <td class="px-6 py-4">
+                  <h3>{{ crypto.crypto_amount }}</h3>
+                </td>
+                <td class="px-6 py-4">
+                  <h3>{{ crypto.crypto_code.toUpperCase() }}</h3>
+                </td>
+                <td class="px-6 py-4">
+                  <h3>{{ crypto.money }} ARS</h3>
+                </td>
+                <td class="px-6 py-4">
+                  <div class="flex justify-end gap-6">
+                    <button
+                      @click="handleSelection(crypto._id)"
+                      data-modal-target="static-modal"
+                      data-modal-toggle="static-modal"
+                      type="button"
+                    >
+                      <i class="bi bi-search" style="font-size: large"></i>
+                      <span class="sr-only">Abrir Modal</span>
+                    </button>
+                    <button
+                      @click="handleSelection(crypto._id)"
+                      data-modal-target="modal-edit"
+                      data-modal-toggle="modal-edit"
+                      type="button"
+                    >
+                      <i
+                        class="bi bi-pencil-square"
+                        style="font-size: large"
+                      ></i>
+                    </button>
+                    <button
+                      @click="handleSelection(crypto._id)"
+                      data-modal-target="popup-modal"
+                      data-modal-toggle="popup-modal"
+                      type="button"
+                    >
+                      <i class="bi bi-trash3" style="font-size: large"></i>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+          <ModalTransaction
+            v-if="selectedTransactionId !== null"
+            :index="selectedTransactionId"
+          ></ModalTransaction>
+          <ModalEditTransaction
+            @transaction-edit="loadTransaction"
+            v-if="selectedTransactionId !== null"
+            :index="selectedTransactionId"
+          ></ModalEditTransaction>
+          <ModalDelete
+            @transaction-delete="loadTransaction"
+            v-if="selectedTransactionId !== null"
+            :index="selectedTransactionId"
+          ></ModalDelete>
+        </div>
       </div>
     </div>
   </div>
