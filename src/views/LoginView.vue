@@ -38,7 +38,7 @@ const submitForm = async () => {
     <div
       class="w-full bg-contain bg-cyan-500 bg-blend-multiply flex justify-center items-center"
       style="
-        background-image: url('src/assets/plataforma.jpg');
+        background-image: url('../../src/assets/plataforma.jpg');
         background-size: cover;
       "
     >

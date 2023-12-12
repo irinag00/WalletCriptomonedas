@@ -15,7 +15,7 @@ export default {
     <div
       class="w-full bg-contain bg-cyan-600 bg-blend-multiply flex justify-center items-center rounded-lg"
       style="
-        background-image: url('src/assets/mano-cripto.jpg');
+        background-image: url('../../../src/assets/mano-cripto.jpg');
         background-size: cover;
         background-position: center;
         background-repeat: no-repeat;
