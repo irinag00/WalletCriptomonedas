@@ -95,7 +95,8 @@ export default {
         this.validationMoney = false;
         // const store = useTransactionStore();
         // const balances = await store.calculateCryptoBalances(this.user);
-        const cryptoBalance = this.balances[this.selectedCoin.coin] || 0; // si balances[selectedCoin] es null, se le asignará el valor de null.
+        const cryptoBalance =
+          this.balances[this.selectedCoin.coin].totalCryptoAmount || 0; // si balances[selectedCoin] es null, se le asignará el valor de null.
 
         if (cryptoBalance < parseFloat(this.cryptoValue)) {
           //si cryptoBalnces es menor al valor ingresado en el input, retorna true.
