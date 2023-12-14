@@ -66,8 +66,8 @@ export default {
           </h3>
         </div>
       </div>
-      <div v-else v-for="(valor, clave) in balances" :key="clave">
-        <div v-if="valor.totalMoney !== 0">
+      <div v-else>
+        <div v-show="totalMoney !== 0">
           <h2 class="text-2xl font-bold mt-5 ml-6">Estado Actual</h2>
           <div
             class="relative overflow-x-auto rounded-lg border border-gray-200 shadow-md m-5"
@@ -120,15 +120,8 @@ export default {
             </table>
           </div>
         </div>
-        <div v-else>
-          <h2 class="text-center text-xl font-bold my-2 mt-10">
-            No cuentas con activos en tu billetera.
-          </h2>
-        </div>
-        <InvestmentAnalysis></InvestmentAnalysis>
       </div>
+      <InvestmentAnalysis></InvestmentAnalysis>
     </div>
-
-    <Footer></Footer>
   </div>
 </template>
