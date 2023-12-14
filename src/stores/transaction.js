@@ -59,9 +59,17 @@ export const useTransactionStore = defineStore("transactionsStore", {
               balance[transaction.crypto_code].totalCryptoAmount * currentPrice;
             const profitLoss =
               currentValue - balance[transaction.crypto_code].totalMoney;
-            balance[transaction.crypto_code].profitLoss = profitLoss.toFixed(2);
+            balance[transaction.crypto_code].profitLoss = parseFloat(
+              profitLoss.toFixed(2)
+            );
           }
-
+          const totalMoneyDifference =
+            balance[transaction.crypto_code].totalMoney.toFixed(2) * -1;
+          if (
+            balance[transaction.crypto_code].profitLoss === totalMoneyDifference
+          ) {
+            balance[transaction.crypto_code].totalMoney = 0;
+          }
           return balance;
         }, {});
         console.log("balances", balances);
