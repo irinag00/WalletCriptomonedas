@@ -14,7 +14,8 @@ export default {
   },
   methods: {
     getCoinImage(clave) {
-      return `src/assets/img-coin/${clave}.png`;
+      // return `src/assets/img-coin/${clave}.png`;
+      return `https://res.cloudinary.com/dsdmjhkms/image/upload/v1706624495/img-coin/${clave}.png`;
     },
   },
 };

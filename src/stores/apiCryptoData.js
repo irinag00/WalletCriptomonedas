@@ -27,7 +27,7 @@ export const useApiDataStore = defineStore("apiData", {
           this.coinData.push({
             name: coinName,
             coin: coin,
-            img: `../../src/assets/img-coin/${coin}.png`,
+            img: `https://res.cloudinary.com/dsdmjhkms/image/upload/v1706624495/img-coin/${coin}.png`,
             priceBuy: response.data.totalAsk,
             priceSale: response.data.totalBid,
           });
